@@ -50,41 +50,33 @@ class BeverageTests: XCTestCase {
     //   500円コインを1枚投入してからボタンを押すとビールが出ない
     
     func test_600円を投入するとビールが出る() {
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 6)
         let item = vendingMachine.dispence(beverage: .beer)
         XCTAssertEqual(item, .beer)
     }
 
     func test_100円をいれるとコーラとウーロン茶だけが光る() {
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 1)
         let lightedButtons = vendingMachine.avalableBeverages()
         XCTAssertEqual(lightedButtons, [.cola, .oolongTea])
     }
     
     func test_200円をいれるとコーラとウーロン茶とレッドブルが光る() {
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 2)
         let lightedButtons = vendingMachine.avalableBeverages()
         let expected: Set<Beverage> = [.redBull, .cola, .oolongTea]
         XCTAssertEqual(expected, lightedButtons)
     }
     
     func test_300円をいれるとコーラとウーロン茶とレッドブルとコーヒーが光る() {
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 3)
         let lightedButtons = vendingMachine.avalableBeverages()
         let expected: Set<Beverage> = Set([.coffee, .cola, .oolongTea, .redBull])
         XCTAssertEqual(expected, lightedButtons)
     }
 
     func test_100円コインを投入してからコーラボタンを押したらコーラが出る() {
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 1)
         let item = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(item, .cola)
     }
@@ -100,52 +92,50 @@ class BeverageTests: XCTestCase {
     }
     
     func test_100円コインを投入してからウーロン茶ボタンを押すとウーロン茶がでる() {
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 1)
         let item = vendingMachine.dispence(beverage: .oolongTea)
         XCTAssertEqual(item, .oolongTea)
     }
     
     func test_200円を投入するとレッドブルが出る() {
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 2)
         let item = vendingMachine.dispence(beverage: .redBull)
         XCTAssertEqual(item, .redBull)
     }
 
     func test_100円だけを投入するとレッドブルが出ない() {
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 1)
         let item = vendingMachine.dispence(beverage: .redBull)
         XCTAssertNil(item)
     }
     
     func test_100円だけを投入するとコーヒーが出ない() {
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 1)
         let item = vendingMachine.dispence(beverage: .coffee)
         XCTAssertNil(item)
     }
 
     func test_200円を投入するとコーヒーが出ない() {
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 2)
         let item = vendingMachine.dispence(beverage: .coffee)
         XCTAssertNil(item)
     }
 
     func test_300円を投入するとコーヒーが出る() {
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 3)
         let item = vendingMachine.dispence(beverage: .coffee)
         XCTAssertEqual(item, .coffee)
     }
 
     func test_400円を投入するとコーヒーが出る() {
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
-        vendingMachine.insert(money: .hundred)
+        insertMutipleCoins(money: .hundred, times: 4)
         let item = vendingMachine.dispence(beverage: .coffee)
         XCTAssertEqual(item, .coffee)
     }
-
+    
+    func insertMutipleCoins(money: Coin, times: Int) {
+        for _ in 0..<times {
+            vendingMachine.insert(money: money)
+        }
+    }
 }
