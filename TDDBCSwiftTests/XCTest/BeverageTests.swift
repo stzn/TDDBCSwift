@@ -38,10 +38,28 @@ class BeverageTests: XCTestCase {
     //   100円をいれると、コーラとウーロン茶だけが光る
     //   200円を入れると、コーラ、ウーロン茶とレッドブルだけが光る
     //   300円入れると、コーラとウーロン茶とレッドブルとコーヒーが光る
-    // x入れたお金より高い金額の飲み物のボタンが全て光らない
-    //   100円をいれると、レッドブルとコーヒが光らない
-    //   200円をいれると、コーヒが光らない
+    // 600円を投入するとビールが出る
+    // 100円コインの他に、10円、50円、500円コインも使える
+    //   50円コインを2枚投入してからボタンを押すとコーラが出る
+    //   10円コインを10枚投入してからボタンを押すとコーラが出る
+    //   50円コインを5枚投入、10円コインを5枚投入してからボタンを押すとコーラが出る
+    //   50円コインを1枚、10円コインを4枚投入してからボタンを押すとコーラが出ない
+    //   500円コインを1枚投入してからボタンを押すとコーラが出る
+    //   500円コインを1枚投入してからボタンを押すとコーヒーが出る
+    //   500円コインを1枚、50円を1枚、10円を5枚投入してからボタンを押すとビールが出る
+    //   500円コインを1枚投入してからボタンを押すとビールが出ない
     
+    func test_600円を投入するとビールが出る() {
+        vendingMachine.insert(money: .hundred)
+        vendingMachine.insert(money: .hundred)
+        vendingMachine.insert(money: .hundred)
+        vendingMachine.insert(money: .hundred)
+        vendingMachine.insert(money: .hundred)
+        vendingMachine.insert(money: .hundred)
+        let item = vendingMachine.dispence(beverage: .beer)
+        XCTAssertEqual(item, .beer)
+    }
+
     func test_100円をいれるとコーラとウーロン茶だけが光る() {
         vendingMachine.insert(money: .hundred)
         let lightedButtons = vendingMachine.avalableBeverages()

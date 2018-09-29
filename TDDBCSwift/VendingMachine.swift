@@ -13,6 +13,7 @@ enum Beverage: CaseIterable, Equatable {
     case oolongTea
     case coffee
     case redBull
+    case beer
     
     var price: Int {
         switch self {
@@ -24,6 +25,8 @@ enum Beverage: CaseIterable, Equatable {
             return 300
         case .redBull:
             return 200
+        case .beer:
+            return 600
         }
     }
 }
