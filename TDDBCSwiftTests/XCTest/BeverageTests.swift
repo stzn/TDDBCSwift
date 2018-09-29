@@ -51,9 +51,7 @@ class BeverageTests: XCTestCase {
     //   x500円コインを1枚、50円を1枚、10円を4枚投入してからボタンを押すとビールが出ない
 
     func test_500円コインを1枚50円を1枚10円を4枚投入してからボタンを押すとビールが出ない() {
-        insertMutipleCoins(money: .fiveHundred, times: 1)
-        insertMutipleCoins(money: .fifty, times: 1)
-        insertMutipleCoins(money: .ten, times: 4)
+        insertMutipleCoins(coins: [.fiveHundred: 1, .fifty: 1, .ten: 4])
         let item = vendingMachine.dispence(beverage: .beer)
         XCTAssertNil(item)
     }
@@ -65,8 +63,7 @@ class BeverageTests: XCTestCase {
     }
     
     func test_50円コインを1枚10円コインを5枚投入してからボタンを押すとコーラが出る() {
-        insertMutipleCoins(money: .fifty, times: 1)
-        insertMutipleCoins(money: .ten, times: 5)
+        insertMutipleCoins(coins: [.fifty: 1, .ten: 5])
         let item = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(item, .cola)
     }
@@ -176,6 +173,14 @@ class BeverageTests: XCTestCase {
     func insertMutipleCoins(money: Coin, times: Int) {
         for _ in 0..<times {
             vendingMachine.insert(money: money)
+        }
+    }
+    
+    func insertMutipleCoins(coins: Dictionary<Coin, Int>) {
+        for (money, times) in coins {
+            for _ in 0..<times {
+                vendingMachine.insert(money: money)
+            }
         }
     }
 }
