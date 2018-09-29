@@ -32,6 +32,7 @@ enum Beverage: CaseIterable, Equatable {
 }
 
 enum Coin: Int {
+    case fifty = 50
     case hundred = 100
 }
 
