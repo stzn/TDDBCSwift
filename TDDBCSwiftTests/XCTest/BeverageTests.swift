@@ -44,11 +44,18 @@ class BeverageTests: XCTestCase {
     //   x50円コインを2枚投入してからボタンを押すとコーラが出る
     //   x10円コインを10枚投入してからボタンを押すとコーラが出る
     //   x50円コインを1枚10円コインを5枚投入してからボタンを押すとコーラが出る
-    //   50円コインを1枚、10円コインを4枚投入してからボタンを押すとコーラが出ない
+    //   x50円コインを1枚、10円コインを4枚投入してからボタンを押すとコーラが出ない
     //   500円コインを1枚投入してからボタンを押すとコーラが出る
     //   500円コインを1枚投入してからボタンを押すとコーヒーが出る
     //   500円コインを1枚、50円を1枚、10円を5枚投入してからボタンを押すとビールが出る
     //   500円コインを1枚投入してからボタンを押すとビールが出ない
+
+    func test_50円コインを1枚10円コインを4枚投入してからボタンを押すとコーラが出ない() {
+        insertMutipleCoins(money: .fifty, times: 1)
+        insertMutipleCoins(money: .ten, times: 4)
+        let item = vendingMachine.dispence(beverage: .cola)
+        XCTAssertNil(item)
+    }
 
     func test_50円コインを1枚10円コインを5枚投入してからボタンを押すとコーラが出る() {
         insertMutipleCoins(money: .fifty, times: 1)
