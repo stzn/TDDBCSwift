@@ -34,23 +34,23 @@ enum Coin: Int {
 
 class VendingMachine {
 
-    var money: Int = 0
+    var paidAmount: Int = 0
     
     func dispence(beverage: Beverage) -> Beverage? {
-        return canBuy(money: money, beverage: beverage)
+        return availableBeverage(money: paidAmount, beverage: beverage)
     }
     
     func insert(money: Coin) {
-        self.money += money.rawValue
+        self.paidAmount += money.rawValue
     }
     
-    func canBuy(money: Int, beverage: Beverage) -> Beverage? {
+    func availableBeverage(money: Int, beverage: Beverage) -> Beverage? {
         return money < beverage.price ? nil : beverage
     }
     
     func avalableBeverages() -> Set<Beverage> {
         let allCases = Beverage.allCases
-            .filter { canBuy(money: money, beverage: $0) != nil }
+            .filter { availableBeverage(money: paidAmount, beverage: $0) != nil }
         return Set(allCases)
     }
 }
