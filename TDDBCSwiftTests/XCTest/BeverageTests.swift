@@ -52,7 +52,8 @@ class BeverageTests: XCTestCase {
         vendingMachine.insert(money: .hundred)
         vendingMachine.insert(money: .hundred)
         let lightedButtons = vendingMachine.avalableBeverages()
-        XCTAssertEqual(lightedButtons, [.cola, .oolongTea, .redBull])
+        let expected: Set<Beverage> = [.redBull, .cola, .oolongTea]
+        XCTAssertEqual(expected, lightedButtons)
     }
     
     func test_300円をいれるとコーラとウーロン茶とレッドブルとコーヒーが光る() {
@@ -60,9 +61,8 @@ class BeverageTests: XCTestCase {
         vendingMachine.insert(money: .hundred)
         vendingMachine.insert(money: .hundred)
         let lightedButtons = vendingMachine.avalableBeverages()
-        let expected: [Beverage] = [.cola, .oolongTea, .redBull, .coffee]
-//        XCTAssertTrue(expected.contains { lightedButtons.contains($0) })
-        XCTAssertTrue(expected.elementsEqual(lightedButtons))
+        let expected: Set<Beverage> = Set([.coffee, .cola, .oolongTea, .redBull])
+        XCTAssertEqual(expected, lightedButtons)
     }
 
     func test_100円コインを投入してからコーラボタンを押したらコーラが出る() {

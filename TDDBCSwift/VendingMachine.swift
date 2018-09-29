@@ -48,10 +48,9 @@ class VendingMachine {
         return money < beverage.price ? nil : beverage
     }
     
-    func avalableBeverages() -> [Beverage] {
-        return Beverage.allCases
+    func avalableBeverages() -> Set<Beverage> {
+        let allCases = Beverage.allCases
             .filter { canBuy(money: money, beverage: $0) != nil }
+        return Set(allCases)
     }
-    
-
 }
