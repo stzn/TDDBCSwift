@@ -38,12 +38,21 @@ enum Coin: Int {
     case fiveHundred = 500
 }
 
+struct PurchaseResult {
+    let beverage: Beverage?
+    let change: Int
+}
+
 class VendingMachine {
 
     var paidAmount: Int = 0
     
-    func dispence(beverage: Beverage) -> Beverage? {
-        return availableBeverage(money: paidAmount, beverage: beverage)
+    func dispence(beverage: Beverage) -> PurchaseResult {
+        guard let product = availableBeverage(money: paidAmount, beverage: beverage) else {
+            return PurchaseResult(beverage: nil, change: 0)
+        }
+        let change = paidAmount - beverage.price
+        return PurchaseResult(beverage: product, change: change)
     }
     
     func insert(money: Coin) {
