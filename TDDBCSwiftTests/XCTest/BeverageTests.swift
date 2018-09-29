@@ -30,10 +30,10 @@ class BeverageTests: XCTestCase {
     // X200円を投入するとレッドブルが出る
     // x何も投入しないとレッドブルが出ない
     // x100円だけを投入するとレッドブルが出ない
-    // x100円を投入するとコーヒー出ない
-    // x200円を投入するとコーヒー出ない
-    // x300円を投入するとコーヒー出る
-    // x400円を投入するとコーヒー出る
+    // x100円を投入するとコーヒーが出ない
+    // x200円を投入するとコーヒーが出ない
+    // x300円を投入するとコーヒーが出る
+    // x400円を投入するとコーヒーが出て100円のお釣りが出る
     // x入れたお金以下の金額の飲み物のボタンが全て光る
     //   x100円をいれると、コーラとウーロン茶だけが光る
     //   x200円を入れると、コーラ、ウーロン茶とレッドブルだけが光る
@@ -69,12 +69,6 @@ class BeverageTests: XCTestCase {
         XCTAssertNil(item.beverage)
     }
 
-    func test_500円コインを1枚投入してからボタンを押すとコーラが出る() {
-        insertMutipleCoins(money: .fiveHundred, times: 1)
-        let item = vendingMachine.dispence(beverage: .cola)
-        XCTAssertEqual(item.beverage, .cola)
-    }
-    
     func test_50円コインを1枚10円コインを5枚投入してからボタンを押すとコーラが出る() {
         insertMutipleCoins(coins: [.fifty: 1, .ten: 5])
         let item = vendingMachine.dispence(beverage: .cola)
@@ -177,10 +171,11 @@ class BeverageTests: XCTestCase {
         XCTAssertEqual(item.beverage, .coffee)
     }
 
-    func test_400円を投入するとコーヒーが出る() {
+    func test_400円を投入するとコーヒーが出て100円のお釣りが出る() {
         insertMutipleCoins(money: .hundred, times: 4)
         let item = vendingMachine.dispence(beverage: .coffee)
         XCTAssertEqual(item.beverage, .coffee)
+        XCTAssertEqual(item.change, 100)
     }
     
     func insertMutipleCoins(money: Coin, times: Int) {
