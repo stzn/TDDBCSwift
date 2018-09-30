@@ -22,21 +22,43 @@ class RemoteStockFetcherTests: XCTestCase {
     // TODO
     // リモートと正しく通信ができる
     //   xコーラの在庫数を正しいURLで通信した場合、正常なレスポンスを返す
-    //   コーヒーの在庫数を正しいURLで通信した場合、正常なレスポンスを返す
+    //   xコーヒーの在庫数を正しいURLで通信した場合、正常なレスポンスを返す
     //   コーラの在庫数を間違ったURLで通信したがサーバーからエラーが返ってきた場合、エラーレスポンスを返す
-    
-    func test_コーラの在庫数を正しいURLで通信した場合_正常なレスポンスを返す() {
-        let urlSession = MockURLSession(data: nil, urlResponse: nil, error: nil)
+
+    func test_コーヒーの在庫数を正しいURLで通信した場合_正常なレスポンスを返す() {
         
-        let exp = expectation(description: "コーラの在庫数を正しいURLで通信した場合_正常なレスポンスを返す")
+        let urlSession = MockURLSession(data: Data(), urlResponse: nil, error: nil)
+        
+        let exp = expectation(description: "コーヒーの在庫数を正しいURLで通信した場合、正常なレスポンスを返す")
         
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
+        var returnedData: Data?
         fetcher.getStocks(of: .cola) { data, response, error in
+            returnedData = data
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
             let expected = URL(string: "https://vending.com/stock?name=cola")
             XCTAssertEqual(urlSession.url, expected)
+            XCTAssertNotNil(returnedData)
+        }
+    }
+
+    func test_コーラの在庫数を正しいURLで通信した場合_正常なレスポンスを返す() {
+        let urlSession = MockURLSession(data: Data(), urlResponse: nil, error: nil)
+        
+        let exp = expectation(description: "コーラの在庫数を正しいURLで通信した場合_正常なレスポンスを返す")
+        
+        let fetcher = RemoteStockFetcher(urlSession: urlSession)
+        var returnedData: Data?
+        fetcher.getStocks(of: .cola) { data, response, error in
+            returnedData = data
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 3) { error in
+            let expected = URL(string: "https://vending.com/stock?name=cola")
+            XCTAssertEqual(urlSession.url, expected)
+            XCTAssertNotNil(returnedData)
         }
     }
 }
