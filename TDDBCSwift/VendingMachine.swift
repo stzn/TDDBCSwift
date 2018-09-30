@@ -60,13 +60,13 @@ class VendingMachine {
         self.paidAmount += money.rawValue
     }
     
-    func availableBeverage(money: Int, beverage: Beverage) -> Beverage? {
-        return money < beverage.price ? nil : beverage
-    }
-    
     func avalableBeverages() -> Set<Beverage> {
         let allCases = Beverage.allCases
             .filter { availableBeverage(money: paidAmount, beverage: $0) != nil }
         return Set(allCases)
+    }
+    
+    private func availableBeverage(money: Int, beverage: Beverage) -> Beverage? {
+        return money < beverage.price ? nil : beverage
     }
 }
