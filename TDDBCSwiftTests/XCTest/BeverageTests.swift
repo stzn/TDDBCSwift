@@ -71,7 +71,7 @@ class BeverageTests: XCTestCase {
     func test_コーヒーの在庫が1の状態でコーヒーを買い在庫を1つ補充してからもう一度コーヒーを買おうとすると買える() {
         insertMutipleCoins(money: .fiveHundred, times: 1)
         _ = vendingMachine.dispence(beverage: .coffee)
-        vendingMachine.supply(.cola, count: 1)
+        vendingMachine.supply(.coffee, count: 1)
         let secondItem = vendingMachine.dispence(beverage: .coffee)
         XCTAssertEqual(secondItem.beverage, .coffee)
     }
