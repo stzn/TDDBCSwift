@@ -68,6 +68,9 @@ class BeverageTests: XCTestCase {
 
     func test_コーラの在庫が1の状態でコーラを買うとコーラが買える() {
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 1)
+        insertMutipleCoins(money: .fiveHundred, times: 1)
+        _ = vendingMachine.dispence(beverage: .cola)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 0)
     }
     
     func test_お金を投入せずに返却ボタンを押すと何も出てこない() {
