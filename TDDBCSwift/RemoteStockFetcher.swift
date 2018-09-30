@@ -26,14 +26,3 @@ protocol SessionProtocol {
 }
 
 extension URLSession: SessionProtocol {}
-
-extension String {
-    var percentEncoded: String {
-        let allowedCharacters = CharacterSet( charactersIn: "/%&=?$#+-~@<>|\\*,.()[]{}^!").inverted
-        
-        guard let encoded = self.addingPercentEncoding(withAllowedCharacters: allowedCharacters) else {
-            fatalError()
-        }
-        return encoded
-    }
-}
