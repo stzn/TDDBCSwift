@@ -57,14 +57,13 @@ final class VendingMachine {
     func dispence(beverage: Beverage) -> PurchaseResult {
         guard
             let product = availableBeverage(money: paidAmount, beverage: beverage),
-            stocks[beverage] != nil,
-            stocks[beverage]! != 0
+            let stock = stocks[beverage], stock != 0
             else {
                 return PurchaseResult(beverage: nil, change: 0)
         }
         let change = paidAmount - beverage.price
         paidAmount = change
-        stocks[beverage]! -= 1
+        stocks[beverage]! = stock - 1
         return PurchaseResult(beverage: product, change: change)
     }
     
