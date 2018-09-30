@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Beverage: CaseIterable, Equatable {
+enum Beverage: CaseIterable, Hashable {
     case cola
     case oolongTea
     case coffee
@@ -46,13 +46,22 @@ struct PurchaseResult {
 class VendingMachine {
 
     var paidAmount: Int = 0
+    var stocks: [Beverage : Int] = [:]
+    
+    init() {
+        Beverage.allCases.forEach {
+            stocks[$0] = 1
+        }
+    }
     
     func dispence(beverage: Beverage) -> PurchaseResult {
-        guard let product = availableBeverage(money: paidAmount, beverage: beverage) else {
+        guard let product = availableBeverage(money: paidAmount, beverage: beverage),
+        stocks[beverage] != nil else {
             return PurchaseResult(beverage: nil, change: 0)
         }
         let change = paidAmount - beverage.price
         paidAmount = change
+        stocks[beverage]! -= 1
         return PurchaseResult(beverage: product, change: change)
     }
     
@@ -71,7 +80,7 @@ class VendingMachine {
     }
     
     func numberOfStocks(of beverage: Beverage) -> Int {
-        return 1
+        return stocks[beverage] ?? 0
     }
     
     private func availableBeverage(money: Int, beverage: Beverage) -> Beverage? {
