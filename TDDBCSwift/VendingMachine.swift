@@ -43,14 +43,14 @@ struct PurchaseResult {
     let change: Int
 }
 
-class VendingMachine {
+final class VendingMachine {
 
     var paidAmount: Int = 0
     var stocks: [Beverage : Int] = [:]
     
-    init() {
+    init(defaultStocks: Int = 1) {
         Beverage.allCases.forEach {
-            stocks[$0] = 1
+            stocks[$0] = defaultStocks
         }
     }
     
