@@ -69,7 +69,7 @@ class BeverageTests: XCTestCase {
     //  コーラの在庫が1の状態でコーラを買い、もう一度コーラを買おうとすると買えない
 
     func test_コーヒーの在庫が1の状態でコーヒーを買い在庫を1つ補充してからもう一度コーヒーを買おうとすると買える() {
-        insertMutipleCoins(money: .fiveHundred, times: 1)
+        insertMutipleCoins(coins: [.fiveHundred: 1, .hundred: 1])
         _ = vendingMachine.dispence(beverage: .coffee)
         vendingMachine.supply(.coffee, count: 1)
         let secondItem = vendingMachine.dispence(beverage: .coffee)
