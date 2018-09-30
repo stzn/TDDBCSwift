@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Beverage: CaseIterable, Hashable {
+enum Beverage: String, CaseIterable, Hashable {
     case cola
     case oolongTea
     case coffee
@@ -56,6 +56,7 @@ enum Coin: Int {
 enum RemoteError: Error {
     case offlineError
     case serverError
+    case invlidURLError
 }
 
 struct PurchaseResult {

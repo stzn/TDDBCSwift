@@ -9,11 +9,18 @@
 import Foundation
 
 struct RemoteStockFetcher: RemoteStockFechable {
-    
+
     let urlSession: SessionProtocol
     
-    func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
-        completion(nil, nil, nil)
+    func getStocks(of beverage: Beverage, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+
+        guard let url = URL(string: "https://vending.com/stock?name=\(beverage.rawValue)") else {
+            completion(nil, nil, RemoteError.invlidURLError)
+            return
+        }
+        urlSession.dataTask(with: url) { data, response, error in
+            completion(data, response, error)
+        }.resume()
     }
 }
 
