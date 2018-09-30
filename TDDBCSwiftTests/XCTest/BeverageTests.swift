@@ -51,11 +51,18 @@ class BeverageTests: XCTestCase {
     //   x500円コインを1枚、50円を1枚、10円を4枚投入してからボタンを押すとビールが出ない
     // ボタンを押して飲み物を買うと、お釣りが出る
     //   x500円コインを1枚投入してからコーラのボタンを押してコーラを買うと400円のお釣りが出る
-    //   100円コインを1枚投入してからコーラのボタンを押してコーラを買うとお釣りが出ない
+    //   x100円コインを1枚投入してからコーラのボタンを押してコーラを買うとお釣りが出ない
     //   100円コインを1枚投入してからコーラのボタンを押してコーラを買い、ウーロン茶のボタンを押してもウーロン茶は出てこない
     //   100円コインを1枚投入してからコーラのボタンを押してコーラを買い、追加で100円を投入してウーロン茶のボタンを押すとウーロン茶は出る
     //   100円コインを1枚投入してからコーヒーのボタンを押してもコーヒーは出ず、お釣りも出ないが、次にコーラのボタンを押すとコーラは出る
 
+    func test_100円コインを1枚投入してからコーラのボタンを押してコーラを買うとお釣りが出ない() {
+        insertMutipleCoins(money: .hundred, times: 1)
+        let item = vendingMachine.dispence(beverage: .cola)
+        XCTAssertEqual(item.beverage, .cola)
+        XCTAssertEqual(item.change, 0)
+    }
+    
     func test_500円コインを1枚投入してからボタンを押してコーラを買うと400円のお釣りが出る() {
         insertMutipleCoins(money: .fiveHundred, times: 1)
         let item = vendingMachine.dispence(beverage: .cola)
