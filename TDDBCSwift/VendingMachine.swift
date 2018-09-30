@@ -60,7 +60,14 @@ struct PurchaseResult {
 
 struct RemoteManager {
     static func getStocks(of beverage: Beverage) -> Int {
-        return 10
+        switch beverage {
+        case .cola:
+            return 10
+        case .coffee:
+            return 20
+        default:
+            return 0
+        }
     }
 }
 
