@@ -53,6 +53,10 @@ enum Coin: Int {
     case fiveHundred = 500
 }
 
+enum RemoteError: Error {
+    case offlineError
+}
+
 struct PurchaseResult {
     let beverage: Beverage?
     let change: Int

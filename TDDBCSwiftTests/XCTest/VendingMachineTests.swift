@@ -75,21 +75,21 @@ class VendingMachineTests: XCTestCase {
     // 通信モジュールから在庫数が取得できる
     //  xコーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
     //  xコーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
-    //  インターネットに繋がっていない場合、リモートに問い合わせがされず、在庫数が取得できない
+    //  xインターネットに繋がっていない場合、リモートに問い合わせされず、エラーとなる
 
-    func test_インターネットに繋がっていない場合_リモートに問い合わせずに_在庫数が取得できない() {
+    func test_インターネットに繋がっていない場合_リモートに問い合わせされず_エラーとなる() {
+        
+        (remoteStockManager as! MockRemoteManager).isOnline = false
         
         remoteStockManager.getStocks(of: .cola) { data, response, error in
             
-            guard let data = data else {
-                XCTFail()
+            if error != nil,
+                let remoteError = error as? RemoteError,
+                case .offlineError = remoteError {
+                XCTAssertTrue(true)
                 return
             }
-            guard let stock = try? JSONDecoder().decode(Stock.self, from: data) else {
-                XCTFail()
-                return
-            }
-            XCTAssertNil(stock)
+            XCTFail()
         }
     }
     
@@ -372,8 +372,16 @@ class VendingMachineTests: XCTestCase {
     }
     
     class MockRemoteManager: RemoteStockFechable {
+        
+        var isOnline = true
+        
         func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
 
+            guard isOnline else {
+                completion(nil, nil, RemoteError.offlineError)
+                return
+            }
+            
             let jsonString: String
             switch beverage {
             case .cola:
