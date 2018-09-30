@@ -73,10 +73,26 @@ class VendingMachineTests: XCTestCase {
     //  xコーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
     //  xコーヒーの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
     // 通信モジュールから在庫数が取得できる
-    //  コーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
-    //  コーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
-    //  インターネットに繋がっていない場合、コーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できない
+    //  xコーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
+    //  xコーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
+    //  インターネットに繋がっていない場合、リモートに問い合わせがされず、在庫数が取得できない
 
+    func test_インターネットに繋がっていない場合_リモートに問い合わせずに_在庫数が取得できない() {
+        
+        remoteStockManager.getStocks(of: .cola) { data, response, error in
+            
+            guard let data = data else {
+                XCTFail()
+                return
+            }
+            guard let stock = try? JSONDecoder().decode(Stock.self, from: data) else {
+                XCTFail()
+                return
+            }
+            XCTAssertNil(stock)
+        }
+    }
+    
     func test_コーヒーの在庫数をリモート監視に問い合わせると_コーヒーの在庫数が取得できる() {
         
         remoteStockManager.getStocks(of: .coffee) { data, response, error in
