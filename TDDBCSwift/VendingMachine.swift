@@ -58,6 +58,29 @@ enum RemoteError: Error {
     case serverError
 }
 
+struct RemoteStockManager {
+    let fetcher: RemoteStockFechable
+    
+    func getStock(of beverage: Beverage, completion: (Stock?) -> Void) {
+        
+        fetcher.getStocks(of: beverage) { data, response, error in
+            if error != nil {
+                completion(nil)
+                return
+            }
+            guard let data = data else {
+                completion(nil)
+                return
+            }
+            guard let stock = try? JSONDecoder().decode(Stock.self, from: data) else {
+                completion(nil)
+                return
+            }
+            completion(stock)
+        }
+    }
+}
+
 struct PurchaseResult {
     let beverage: Beverage?
     let change: Int
@@ -126,4 +149,6 @@ final class VendingMachine {
         return money < beverage.price ? nil : beverage
     }
 }
+
+
 

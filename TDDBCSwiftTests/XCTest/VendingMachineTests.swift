@@ -11,13 +11,13 @@ import XCTest
 
 class VendingMachineTests: XCTestCase {
     var vendingMachine: VendingMachine!
-    var remoteStockManager: RemoteStockFechable!
+    var remoteStockManager: RemoteStockManager!
     
     override func setUp() {
         vendingMachine = VendingMachine()
-        remoteStockManager = MockRemoteManager()
+        remoteStockManager = RemoteStockManager(fetcher: MockRemoteStockFetcher())
     }
-
+    
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
@@ -72,69 +72,46 @@ class VendingMachineTests: XCTestCase {
     // x飲み物はそれぞれ限られた本数しか格納できない
     //  xコーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
     //  xコーヒーの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
-    // 通信モジュールから在庫数が取得できる
+    // x通信モジュールから在庫数が取得できる
     //  xコーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
     //  xコーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
-    //  xインターネットに繋がっていない場合、リモートに問い合わせされず、エラーとなる
-    //  xリモートに問い合わせをするがサーバーがエラーを返した場合、エラーとなる
-
-    func test_リモートに問い合わせをするがサーバーがエラーを返した場合_エラーとなる() {
-
-        remoteStockManager = MockRemoteErrorManager()
+    //  xインターネットに繋がっていない場合、リモートに問い合わせされず、在庫数は取得できない
+    //  xリモートに問い合わせをするがサーバーがエラーを返した場合、在庫数は取得できない
+    
+    func test_リモートに問い合わせをするがサーバーがエラーを返した場合_在庫数は取得できない() {
         
-        remoteStockManager.getStocks(of: .cola) { data, response, error in
-            
-            if error != nil,
-                let remoteError = error as? RemoteError,
-                case .serverError = remoteError {
-                XCTAssertTrue(true)
-                return
-            }
-            XCTFail()
+        remoteStockManager = RemoteStockManager(fetcher: MockRemoteErrorFetcher())
+        
+        remoteStockManager.getStock(of: .cola) { stock in
+            XCTAssertNil(stock)
         }
     }
-
-    func test_インターネットに繋がっていない場合_リモートに問い合わせされず_エラーとなる() {
+    
+    func test_インターネットに繋がっていない場合_リモートに問い合わせされず_在庫数は取得できない() {
         
-        (remoteStockManager as! MockRemoteManager).isOnline = false
+        (remoteStockManager.fetcher as! MockRemoteStockFetcher).isOnline = false
         
-        remoteStockManager.getStocks(of: .cola) { data, response, error in
-            
-            if error != nil,
-                let remoteError = error as? RemoteError,
-                case .offlineError = remoteError {
-                XCTAssertTrue(true)
-                return
-            }
-            XCTFail()
+        remoteStockManager.getStock(of: .cola) { stock in
+            XCTAssertNil(stock)
         }
     }
     
     func test_コーヒーの在庫数をリモート監視に問い合わせると_コーヒーの在庫数が取得できる() {
         
-        remoteStockManager.getStocks(of: .coffee) { data, response, error in
+        remoteStockManager.getStock(of: .coffee) { stock in
             
-            guard let data = data else {
-                XCTFail()
-                return
-            }
-            guard let stock = try? JSONDecoder().decode(Stock.self, from: data) else {
+            guard let stock = stock else {
                 XCTFail()
                 return
             }
             XCTAssertEqual(stock.count, 20)
         }
     }
-
+    
     func test_コーラの在庫数をリモート監視に問い合わせると_コーラの在庫数が取得できる() {
         
-        remoteStockManager.getStocks(of: .cola) { data, response, error in
-            
-            guard let data = data else {
-                XCTFail()
-                return
-            }
-            guard let stock = try? JSONDecoder().decode(Stock.self, from: data) else {
+        remoteStockManager.getStock(of: .cola) { stock in
+            guard let stock = stock else {
                 XCTFail()
                 return
             }
@@ -154,7 +131,7 @@ class VendingMachineTests: XCTestCase {
         vendingMachine.supply(.cola, count: 2)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 3)
     }
-
+    
     func test_コーヒーの在庫が1の状態でコーヒーを買い在庫を1つ補充してからもう一度コーヒーを買おうとすると買える() {
         insertMutipleCoins(coins: [.fiveHundred: 1, .hundred: 1])
         _ = vendingMachine.dispence(beverage: .coffee)
@@ -162,7 +139,7 @@ class VendingMachineTests: XCTestCase {
         let secondItem = vendingMachine.dispence(beverage: .coffee)
         XCTAssertEqual(secondItem.beverage, .coffee)
     }
-
+    
     func test_コーラの在庫が1の状態でコーラを買い在庫を1つ補充してからもう一度コーラを買おうとすると買える() {
         insertMutipleCoins(money: .fiveHundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
@@ -170,7 +147,7 @@ class VendingMachineTests: XCTestCase {
         let secondItem = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(secondItem.beverage, .cola)
     }
-
+    
     func test_コーラの在庫が2の状態でコーラを買いさらにもう一度コーラを買うことができる() {
         vendingMachine = VendingMachine(defaultStocks: 2)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 2)
@@ -186,7 +163,7 @@ class VendingMachineTests: XCTestCase {
         _ = vendingMachine.dispence(beverage: .coffee)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .coffee), 0)
     }
-
+    
     func test_コーラの在庫が1の状態でコーラを買いもう一度コーラを買おうとすると買えない() {
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 1)
         insertMutipleCoins(money: .fiveHundred, times: 1)
@@ -214,13 +191,13 @@ class VendingMachineTests: XCTestCase {
         let returnedMoney = vendingMachine.pushReturnButton()
         XCTAssertEqual(returnedMoney, 400)
     }
-
+    
     func test_200円を投入してから返却ボタンを押すと200円が出てくる() {
         insertMutipleCoins(money: .hundred, times: 2)
         let returnedMoney = vendingMachine.pushReturnButton()
         XCTAssertEqual(returnedMoney, 200)
     }
-
+    
     func test_100円を投入してから返却ボタンを押すと100円が出てくる() {
         insertMutipleCoins(money: .hundred, times: 1)
         let returnedMoney = vendingMachine.pushReturnButton()
@@ -235,7 +212,7 @@ class VendingMachineTests: XCTestCase {
         let cola = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(cola.beverage, .cola)
     }
-
+    
     func test_100円コインを1枚投入してからコーラのボタンを押してコーラを買い追加で100円を投入してウーロン茶のボタンを押すとウーロン茶は出る() {
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
@@ -250,7 +227,7 @@ class VendingMachineTests: XCTestCase {
         let oolong = vendingMachine.dispence(beverage: .oolongTea)
         XCTAssertNil(oolong.beverage)
     }
-
+    
     func test_100円コインを1枚投入してからコーラのボタンを押してコーラを買うとお釣りが出ない() {
         insertMutipleCoins(money: .hundred, times: 1)
         let item = vendingMachine.dispence(beverage: .cola)
@@ -264,25 +241,25 @@ class VendingMachineTests: XCTestCase {
         XCTAssertEqual(item.beverage, .cola)
         XCTAssertEqual(item.change, 400)
     }
-
+    
     func test_500円コインを1枚50円を1枚10円を4枚投入してからボタンを押すとビールが出ない() {
         insertMutipleCoins(coins: [.fiveHundred: 1, .fifty: 1, .ten: 4])
         let item = vendingMachine.dispence(beverage: .beer)
         XCTAssertNil(item.beverage)
     }
-
+    
     func test_50円コインを1枚10円コインを5枚投入してからボタンを押すとコーラが出る() {
         insertMutipleCoins(coins: [.fifty: 1, .ten: 5])
         let item = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(item.beverage, .cola)
     }
-
+    
     func test_10円コインを10枚投入してからボタンを押すとコーラが出る() {
         insertMutipleCoins(money: .ten, times: 10)
         let item = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(item.beverage, .cola)
     }
-
+    
     func test_50円コインを2枚投入してからボタンを押すとコーラが出る() {
         insertMutipleCoins(money: .fifty, times: 2)
         let item = vendingMachine.dispence(beverage: .cola)
@@ -294,13 +271,13 @@ class VendingMachineTests: XCTestCase {
         let item = vendingMachine.dispence(beverage: .beer)
         XCTAssertEqual(item.beverage, .beer)
     }
-
+    
     func test_500円を投入するとビールが出ない() {
         insertMutipleCoins(money: .hundred, times: 5)
         let item = vendingMachine.dispence(beverage: .beer)
         XCTAssertNil(item.beverage)
     }
-
+    
     func test_100円をいれるとコーラとウーロン茶だけが光る() {
         insertMutipleCoins(money: .hundred, times: 1)
         let lightedButtons = vendingMachine.avalableBeverages()
@@ -320,7 +297,7 @@ class VendingMachineTests: XCTestCase {
         let expected: Set<Beverage> = Set([.coffee, .cola, .oolongTea, .redBull])
         XCTAssertEqual(expected, lightedButtons)
     }
-
+    
     func test_100円コインを投入する前にコーラボタンを押すと何も出ない() {
         let item = vendingMachine.dispence(beverage: .cola)
         XCTAssertNil(item.beverage)
@@ -342,7 +319,7 @@ class VendingMachineTests: XCTestCase {
         let item = vendingMachine.dispence(beverage: .redBull)
         XCTAssertEqual(item.beverage, .redBull)
     }
-
+    
     func test_100円だけを投入するとレッドブルが出ない() {
         insertMutipleCoins(money: .hundred, times: 1)
         let item = vendingMachine.dispence(beverage: .redBull)
@@ -354,19 +331,19 @@ class VendingMachineTests: XCTestCase {
         let item = vendingMachine.dispence(beverage: .coffee)
         XCTAssertNil(item.beverage)
     }
-
+    
     func test_200円を投入するとコーヒーが出ない() {
         insertMutipleCoins(money: .hundred, times: 2)
         let item = vendingMachine.dispence(beverage: .coffee)
         XCTAssertNil(item.beverage)
     }
-
+    
     func test_300円を投入するとコーヒーが出る() {
         insertMutipleCoins(money: .hundred, times: 3)
         let item = vendingMachine.dispence(beverage: .coffee)
         XCTAssertEqual(item.beverage, .coffee)
     }
-
+    
     func test_400円を投入するとコーヒーが出て100円のお釣りが出る() {
         insertMutipleCoins(money: .hundred, times: 4)
         let item = vendingMachine.dispence(beverage: .coffee)
@@ -388,12 +365,12 @@ class VendingMachineTests: XCTestCase {
         }
     }
     
-    class MockRemoteManager: RemoteStockFechable {
+    class MockRemoteStockFetcher: RemoteStockFechable {
         
         var isOnline = true
         
         func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
-
+            
             guard isOnline else {
                 completion(nil, nil, RemoteError.offlineError)
                 return
@@ -417,10 +394,10 @@ class VendingMachineTests: XCTestCase {
         }
     }
     
-    class MockRemoteErrorManager: RemoteStockFechable {
+    class MockRemoteErrorFetcher: RemoteStockFechable {
         func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
             completion(nil, HTTPURLResponse(), RemoteError.serverError)
         }
     }
-
 }
+
