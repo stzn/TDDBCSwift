@@ -55,6 +55,7 @@ enum Coin: Int {
 
 enum RemoteError: Error {
     case offlineError
+    case serverError
 }
 
 struct PurchaseResult {

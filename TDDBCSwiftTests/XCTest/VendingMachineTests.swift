@@ -76,6 +76,23 @@ class VendingMachineTests: XCTestCase {
     //  xコーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
     //  xコーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
     //  xインターネットに繋がっていない場合、リモートに問い合わせされず、エラーとなる
+    //  xリモートに問い合わせをするがサーバーがエラーを返した場合、エラーとなる
+
+    func test_リモートに問い合わせをするがサーバーがエラーを返した場合_エラーとなる() {
+
+        remoteStockManager = MockRemoteErrorManager()
+        
+        remoteStockManager.getStocks(of: .cola) { data, response, error in
+            
+            if error != nil,
+                let remoteError = error as? RemoteError,
+                case .serverError = remoteError {
+                XCTAssertTrue(true)
+                return
+            }
+            XCTFail()
+        }
+    }
 
     func test_インターネットに繋がっていない場合_リモートに問い合わせされず_エラーとなる() {
         
@@ -399,4 +416,11 @@ class VendingMachineTests: XCTestCase {
             completion(data, HTTPURLResponse(), nil)
         }
     }
+    
+    class MockRemoteErrorManager: RemoteStockFechable {
+        func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
+            completion(nil, HTTPURLResponse(), RemoteError.serverError)
+        }
+    }
+
 }
