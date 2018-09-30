@@ -66,6 +66,10 @@ class VendingMachine {
         return Set(allCases)
     }
     
+    func pushReturnButton() -> Int {
+        return 100
+    }
+    
     private func availableBeverage(money: Int, beverage: Beverage) -> Beverage? {
         return money < beverage.price ? nil : beverage
     }
