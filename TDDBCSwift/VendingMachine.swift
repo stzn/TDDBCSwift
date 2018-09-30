@@ -86,7 +86,7 @@ final class VendingMachine {
     }
     
     func supply(_ bevarage: Beverage, count: Int) {
-        return stocks[.cola, default: 0] += 1
+        return stocks[bevarage, default: 0] += count
     }
     
     private func availableBeverage(money: Int, beverage: Beverage) -> Beverage? {
