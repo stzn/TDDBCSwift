@@ -44,7 +44,7 @@ struct PurchaseResult {
 }
 
 final class VendingMachine {
-
+    
     var paidAmount: Int = 0
     var stocks: [Beverage : Int] = [:]
     
@@ -55,9 +55,12 @@ final class VendingMachine {
     }
     
     func dispence(beverage: Beverage) -> PurchaseResult {
-        guard let product = availableBeverage(money: paidAmount, beverage: beverage),
-        stocks[beverage] != nil else {
-            return PurchaseResult(beverage: nil, change: 0)
+        guard
+            let product = availableBeverage(money: paidAmount, beverage: beverage),
+            stocks[beverage] != nil,
+            stocks[beverage]! != 0
+            else {
+                return PurchaseResult(beverage: nil, change: 0)
         }
         let change = paidAmount - beverage.price
         paidAmount = change
@@ -87,3 +90,4 @@ final class VendingMachine {
         return money < beverage.price ? nil : beverage
     }
 }
+
