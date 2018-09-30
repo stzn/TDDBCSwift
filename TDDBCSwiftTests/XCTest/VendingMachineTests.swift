@@ -1,5 +1,5 @@
 //
-//  BeverageTests.swift
+//  VendingMachineTests.swift
 //  TDDBCSwiftTests
 //
 //  Created by Shinzan Takata on 2018/09/29.
@@ -19,7 +19,8 @@ class VendingMachineTests: XCTestCase {
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        remoteStockManager = nil
+        super.tearDown()
     }
     
     // TODO
@@ -72,12 +73,22 @@ class VendingMachineTests: XCTestCase {
     // x飲み物はそれぞれ限られた本数しか格納できない
     //  xコーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
     //  xコーヒーの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
-    // x通信モジュールから在庫数が取得できる
+    // 通信モジュールから在庫数が取得できる
     //  xコーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
     //  xコーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
     //  xインターネットに繋がっていない場合、リモートに問い合わせされず、在庫数は取得できない
     //  xリモートに問い合わせをするがサーバーがエラーを返した場合、在庫数は取得できない
-    
+    //  リモートに問い合わせをするがサーバーがHTTPレスポンスのエラーコードを返した場合、在庫数は取得できない
+
+    func test_リモートに問い合わせをするがサーバーがHTTPレスポンスのエラーコードを返した場合_在庫数は取得できない() {
+        
+        remoteStockManager = RemoteStockManager(fetcher: MockRemoteHttpResponseErrorFetcher())
+        
+        remoteStockManager.getStock(of: .cola) { stock in
+            XCTAssertNil(stock)
+        }
+    }
+
     func test_リモートに問い合わせをするがサーバーがエラーを返した場合_在庫数は取得できない() {
         
         remoteStockManager = RemoteStockManager(fetcher: MockRemoteErrorFetcher())
@@ -390,13 +401,25 @@ class VendingMachineTests: XCTestCase {
                 jsonString = "{\"count\": 30}"
             }
             let data = jsonString.data(using: .utf8)
-            completion(data, HTTPURLResponse(), nil)
+
+            let url = URL(string: "hogehoge")!
+            let httpResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
+            completion(data, httpResponse, nil)
         }
     }
     
     class MockRemoteErrorFetcher: RemoteStockFechable {
         func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
             completion(nil, HTTPURLResponse(), RemoteError.serverError)
+        }
+    }
+    
+    class MockRemoteHttpResponseErrorFetcher: RemoteStockFechable {
+        func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
+            let url = URL(string: "hogehoge")!
+            let httpResponse = HTTPURLResponse(url: url, statusCode: 500, httpVersion: nil, headerFields: nil)
+            let data = "{\"count\": 30}".data(using: .utf8)
+            completion(data, httpResponse, nil)
         }
     }
 }
