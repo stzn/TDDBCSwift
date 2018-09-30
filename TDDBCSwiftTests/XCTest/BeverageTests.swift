@@ -60,8 +60,8 @@ class BeverageTests: XCTestCase {
     // 500円コインを1枚投入してからコーラのボタンを押してコーラを買い、返却ボタンを押すと400円が出てくる
     // お金を投入せずに返却ボタンを押すと何も出てこない
 
-    
     func test_100円を投入してから返却ボタンを押すと100円が出てくる() {
+        insertMutipleCoins(money: .hundred, times: 1)
         let returnedMoney = vendingMachine.pushReturnButton()
         XCTAssertEqual(returnedMoney, 100)
     }

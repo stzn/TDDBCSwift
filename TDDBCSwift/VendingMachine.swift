@@ -67,7 +67,7 @@ class VendingMachine {
     }
     
     func pushReturnButton() -> Int {
-        return 100
+        return paidAmount
     }
     
     private func availableBeverage(money: Int, beverage: Beverage) -> Beverage? {
