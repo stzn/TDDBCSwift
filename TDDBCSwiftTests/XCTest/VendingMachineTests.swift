@@ -11,9 +11,11 @@ import XCTest
 
 class VendingMachineTests: XCTestCase {
     var vendingMachine: VendingMachine!
+    var remoteStockManager: RemoteStockFechable!
     
     override func setUp() {
         vendingMachine = VendingMachine()
+        remoteStockManager = MockRemoteManager()
     }
 
     override func tearDown() {
@@ -71,18 +73,40 @@ class VendingMachineTests: XCTestCase {
     //  xコーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
     //  xコーヒーの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
     // 通信モジュールから在庫数が取得できる
-    //  インターネットに繋がっている場合、コーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
-    //  インターネットに繋がっている場合、コーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
+    //  コーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
+    //  コーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
     //  インターネットに繋がっていない場合、コーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できない
 
     func test_インターネットに繋がっている場合_コーヒーの在庫数をリモート監視に問い合わせると_コーヒーの在庫数が取得できる() {
-        let coffeeStocks = RemoteManager.getStocks(of: .coffee)
-        XCTAssertEqual(coffeeStocks, 20)
+        
+        remoteStockManager.getStocks(of: .coffee) { data, response, error in
+            
+            guard let data = data else {
+                XCTFail()
+                return
+            }
+            guard let stock = try? JSONDecoder().decode(Stock.self, from: data) else {
+                XCTFail()
+                return
+            }
+            XCTAssertEqual(stock.count, 20)
+        }
     }
 
     func test_インターネットに繋がっている場合_コーラの在庫数をリモート監視に問い合わせると_コーラの在庫数が取得できる() {
-        let colaStocks = RemoteManager.getStocks(of: .cola)
-        XCTAssertEqual(colaStocks, 10)
+        
+        remoteStockManager.getStocks(of: .cola) { data, response, error in
+            
+            guard let data = data else {
+                XCTFail()
+                return
+            }
+            guard let stock = try? JSONDecoder().decode(Stock.self, from: data) else {
+                XCTFail()
+                return
+            }
+            XCTAssertEqual(stock.count, 10)
+        }
     }
     
     func test_コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
@@ -328,6 +352,27 @@ class VendingMachineTests: XCTestCase {
             for _ in 0..<times {
                 vendingMachine.insert(money: money)
             }
+        }
+    }
+    
+    class MockRemoteManager: RemoteStockFechable {
+        func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
+
+            let jsonString: String
+            switch beverage {
+            case .cola:
+                jsonString = "{\"count\": 10}"
+            case .oolongTea:
+                jsonString = "{\"count\": 15}"
+            case .coffee:
+                jsonString = "{\"count\": 20}"
+            case .redBull:
+                jsonString = "{\"count\": 25}"
+            case .beer:
+                jsonString = "{\"count\": 30}"
+            }
+            let data = jsonString.data(using: .utf8)
+            completion(data, HTTPURLResponse(), nil)
         }
     }
 }

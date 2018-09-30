@@ -19,7 +19,6 @@
 		62D11DB71F7F614E00739528 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D11DB11F7F601E00739528 /* Quick.framework */; };
 		D60AC512215F36FD0000162A /* VendingMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60AC511215F36FD0000162A /* VendingMachineTests.swift */; };
 		D60AC514215F38B50000162A /* VendingMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60AC513215F38B50000162A /* VendingMachine.swift */; };
-		D611C0632160CEA700330ECC /* RemoteManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611C0622160CEA700330ECC /* RemoteManagerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +52,6 @@
 		62D11DB11F7F601E00739528 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		D60AC511215F36FD0000162A /* VendingMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendingMachineTests.swift; sourceTree = "<group>"; };
 		D60AC513215F38B50000162A /* VendingMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendingMachine.swift; sourceTree = "<group>"; };
-		D611C0622160CEA700330ECC /* RemoteManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +135,6 @@
 			children = (
 				62D11D9F1F7F56EC00739528 /* ExampleXCTestTests.swift */,
 				D60AC511215F36FD0000162A /* VendingMachineTests.swift */,
-				D611C0622160CEA700330ECC /* RemoteManagerTests.swift */,
 			);
 			path = XCTest;
 			sourceTree = "<group>";
@@ -287,7 +284,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				62D11DAD1F7F580E00739528 /* ExampleQuickTests.swift in Sources */,
-				D611C0632160CEA700330ECC /* RemoteManagerTests.swift in Sources */,
 				62D11DA01F7F56EC00739528 /* ExampleXCTestTests.swift in Sources */,
 				D60AC512215F36FD0000162A /* VendingMachineTests.swift in Sources */,
 			);

@@ -58,17 +58,14 @@ struct PurchaseResult {
     let change: Int
 }
 
-struct RemoteManager {
-    static func getStocks(of beverage: Beverage) -> Int {
-        switch beverage {
-        case .cola:
-            return 10
-        case .coffee:
-            return 20
-        default:
-            return 0
-        }
-    }
+struct Stock: Decodable {
+    let count: Int
+}
+
+typealias ResponseHandler = (Data?, URLResponse?, Error?) -> Void
+
+protocol RemoteStockFechable {
+    func getStocks(of beverage: Beverage, completion: ResponseHandler)
 }
 
 final class VendingMachine {
