@@ -75,6 +75,11 @@ class VendingMachineTests: XCTestCase {
     //  インターネットに繋がっている場合、コーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
     //  インターネットに繋がっていない場合、コーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できない
 
+    func test_インターネットに繋がっている場合_コーヒーの在庫数をリモート監視に問い合わせると_コーヒーの在庫数が取得できる() {
+        let coffeeStocks = RemoteManager.getStocks(of: .coffee)
+        XCTAssertEqual(coffeeStocks, 20)
+    }
+
     func test_インターネットに繋がっている場合_コーラの在庫数をリモート監視に問い合わせると_コーラの在庫数が取得できる() {
         let colaStocks = RemoteManager.getStocks(of: .cola)
         XCTAssertEqual(colaStocks, 10)
