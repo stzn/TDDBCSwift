@@ -101,6 +101,9 @@ final class VendingMachine {
     }
     
     func supply(_ bevarage: Beverage, count: Int) {
+        guard stocks[bevarage, default: 0] < bevarage.maxStockCount else {
+            return
+        }
         return stocks[bevarage, default: 0] += count
     }
     
