@@ -67,16 +67,9 @@ class BeverageTests: XCTestCase {
     //  xコーラの在庫が1の状態でコーラを買い、 在庫を1つ補充してからもう一度コーラを買おうとすると買える
     //  xコーヒーの在庫が1の状態でコーヒーを買い、 在庫を1つ補充してからもう一度コーヒーを買おうとすると買える
     //  xコーラの在庫が1の状態で在庫を2つ補充すると在庫数は３になる
-    // 飲み物はそれぞれ限られた本数しか格納できない
+    // x飲み物はそれぞれ限られた本数しか格納できない
     //  xコーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
     //  xコーヒーの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
-
-    func test_コーヒーの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
-        let coffeeMaxStockCount = Beverage.coffee.maxStockCount
-        vendingMachine = VendingMachine(defaultStocks: coffeeMaxStockCount)
-        vendingMachine.supply(.coffee, count: 1)
-        XCTAssertEqual(vendingMachine.numberOfStocks(of: .coffee), coffeeMaxStockCount)
-    }
 
     func test_コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
         let colaMaxStockCount = Beverage.cola.maxStockCount
