@@ -126,12 +126,6 @@ class BeverageTests: XCTestCase {
         XCTAssertEqual(expected, lightedButtons)
     }
 
-    func test_100円コインを投入してからコーラボタンを押したらコーラが出る() {
-        insertMutipleCoins(money: .hundred, times: 1)
-        let item = vendingMachine.dispence(beverage: .cola)
-        XCTAssertEqual(item.beverage, .cola)
-    }
-    
     func test_100円コインを投入する前にコーラボタンを押すと何も出ない() {
         let item = vendingMachine.dispence(beverage: .cola)
         XCTAssertNil(item.beverage)
