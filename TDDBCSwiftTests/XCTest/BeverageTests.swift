@@ -59,7 +59,7 @@ class BeverageTests: XCTestCase {
     // x200円を投入してから返却ボタンを押すと200円が出てくる
     // x500円コインを1枚投入してからコーラのボタンを押してコーラを買い、返却ボタンを押すと400円が出てくる
     // xお金を投入せずに返却ボタンを押すと何も出てこない
-    // 在庫がなくなった飲み物は売れない
+    // x在庫がなくなった飲み物は売れない
     //  xコーラの在庫が1の状態でコーラを買うと在庫が0になる
     //  xコーラの在庫が1の状態でコーラを買い、もう一度コーラを買おうとすると買えない
     //  xコーヒーの在庫が1の状態でコーヒーを買うと在庫が0になる
@@ -67,7 +67,17 @@ class BeverageTests: XCTestCase {
     //  xコーラの在庫が1の状態でコーラを買い、 在庫を1つ補充してからもう一度コーラを買おうとすると買える
     //  xコーヒーの在庫が1の状態でコーヒーを買い、 在庫を1つ補充してからもう一度コーヒーを買おうとすると買える
     //  xコーラの在庫が1の状態で在庫を2つ補充すると在庫数は３になる
+    // 飲み物はそれぞれ限られた本数しか格納できない
+    //  コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
+    //  コーヒーの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
 
+    func test_コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
+        let colaMaxStockCount = Beverage.cola.maxStockCount
+        vendingMachine = VendingMachine(defaultStocks: colaMaxStockCount)
+        vendingMachine.supply(.cola, count: 1)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), colaMaxStockCount)
+    }
+    
     func test_コーラの在庫が1の状態で在庫を2つ補充すると在庫数は３になる() {
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 1)
         vendingMachine.supply(.cola, count: 2)

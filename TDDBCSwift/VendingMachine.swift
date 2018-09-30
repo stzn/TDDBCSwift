@@ -29,6 +29,21 @@ enum Beverage: CaseIterable, Hashable {
             return 600
         }
     }
+    
+    var maxStockCount: Int {
+        switch self {
+        case .cola:
+            return 10
+        case .oolongTea:
+            return 15
+        case .coffee:
+            return 20
+        case .redBull:
+            return 100
+        case .beer:
+            return 1000
+        }
+    }
 }
 
 enum Coin: Int {
