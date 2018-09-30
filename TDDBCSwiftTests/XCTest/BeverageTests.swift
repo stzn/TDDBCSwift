@@ -63,16 +63,11 @@ class BeverageTests: XCTestCase {
     //  コーラの在庫が1の状態でコーラを買うとコーラが買える
     //  コーラの在庫が1の状態でコーラを買い、もう一度コーラを買おうとすると買えない
     //  コーヒーの在庫が1の状態でコーヒーを買うとコーヒーが買える
-    //  コーラの在庫が2の状態でコーラを買い、もう一度コーラが買える
-
-    func test_コーラの在庫が1の状態でコーラを買いもう一度コーラを買おうとすると買えない() {
-        XCTAssertFalse(vendingMachine.hasStock(of: .cola))
-    }
+    //  コーラの在庫が2の状態でコーラを買い、さらにもう一度コーラを買うことができる
+    //  コーラの在庫が1の状態でコーラを買い、 在庫を1つ補充してからもう一度コーラを買おうとすると買える
 
     func test_コーラの在庫が1の状態でコーラを買うとコーラが買える() {
-        insertMutipleCoins(money: .fiveHundred, times: 1)
-        _ = vendingMachine.dispence(beverage: .cola)
-        XCTAssertTrue(vendingMachine.hasStock(of: .cola))
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 1)
     }
     
     func test_お金を投入せずに返却ボタンを押すと何も出てこない() {

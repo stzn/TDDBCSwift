@@ -70,8 +70,8 @@ class VendingMachine {
         return paidAmount
     }
     
-    func hasStock(of beverage: Beverage) -> Bool {
-        return true
+    func numberOfStocks(of beverage: Beverage) -> Int {
+        return 1
     }
     
     private func availableBeverage(money: Int, beverage: Beverage) -> Beverage? {
