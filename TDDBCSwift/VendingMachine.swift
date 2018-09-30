@@ -68,6 +68,13 @@ struct RemoteStockManager {
                 completion(nil)
                 return
             }
+            
+            guard let response = response as? HTTPURLResponse,
+                200..<400 ~= response.statusCode else {
+                completion(nil)
+                return
+            }
+            
             guard let data = data else {
                 completion(nil)
                 return
