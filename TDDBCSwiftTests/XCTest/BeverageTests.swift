@@ -70,7 +70,17 @@ class BeverageTests: XCTestCase {
     // x飲み物はそれぞれ限られた本数しか格納できない
     //  xコーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
     //  xコーヒーの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
+    // 通信モジュールから在庫数が取得できる
+    //  インターネットに繋がっている場合、コーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
+    //  インターネットに繋がっている場合、コーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
+    //  インターネットに繋がっていない場合、コーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できない
 
+    func test_インターネットに繋がっている場合_コーラの在庫数をリモート監視に問い合わせると_コーラの在庫数が取得できる() {
+        let colaStocks = RemoteManager.getStocks(of: .cola)
+        XCTAssertEqual(colaStocks, 10)
+    }
+    
+    
     func test_コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
         let colaMaxStockCount = Beverage.cola.maxStockCount
         vendingMachine = VendingMachine(defaultStocks: colaMaxStockCount)

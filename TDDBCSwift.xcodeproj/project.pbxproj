@@ -19,6 +19,7 @@
 		62D11DB71F7F614E00739528 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D11DB11F7F601E00739528 /* Quick.framework */; };
 		D60AC512215F36FD0000162A /* BeverageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60AC511215F36FD0000162A /* BeverageTests.swift */; };
 		D60AC514215F38B50000162A /* VendingMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60AC513215F38B50000162A /* VendingMachine.swift */; };
+		D611C0612160C93700330ECC /* RemoteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611C0602160C93700330ECC /* RemoteManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		62D11DB11F7F601E00739528 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		D60AC511215F36FD0000162A /* BeverageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeverageTests.swift; sourceTree = "<group>"; };
 		D60AC513215F38B50000162A /* VendingMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VendingMachine.swift; sourceTree = "<group>"; };
+		D611C0602160C93700330ECC /* RemoteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				2475E38E726EC3D670B210AF /* Sample.swift */,
 				62D11D8C1F7F56EC00739528 /* ViewController.swift */,
 				D60AC513215F38B50000162A /* VendingMachine.swift */,
+				D611C0602160C93700330ECC /* RemoteManager.swift */,
 			);
 			path = TDDBCSwift;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 			files = (
 				62D11D8D1F7F56EC00739528 /* ViewController.swift in Sources */,
 				62D11D8B1F7F56EC00739528 /* AppDelegate.swift in Sources */,
+				D611C0612160C93700330ECC /* RemoteManager.swift in Sources */,
 				2475E28BE43743071E748308 /* Sample.swift in Sources */,
 				D60AC514215F38B50000162A /* VendingMachine.swift in Sources */,
 			);
