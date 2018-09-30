@@ -9,7 +9,7 @@
 import XCTest
 @testable import TDDBCSwift
 
-class BeverageTests: XCTestCase {
+class VendingMachineTests: XCTestCase {
     var vendingMachine: VendingMachine!
     
     override func setUp() {
@@ -79,7 +79,6 @@ class BeverageTests: XCTestCase {
         let colaStocks = RemoteManager.getStocks(of: .cola)
         XCTAssertEqual(colaStocks, 10)
     }
-    
     
     func test_コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
         let colaMaxStockCount = Beverage.cola.maxStockCount

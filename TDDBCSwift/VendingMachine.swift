@@ -58,6 +58,12 @@ struct PurchaseResult {
     let change: Int
 }
 
+struct RemoteManager {
+    static func getStocks(of beverage: Beverage) -> Int {
+        return 10
+    }
+}
+
 final class VendingMachine {
     
     var paidAmount: Int = 0
