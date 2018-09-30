@@ -52,6 +52,7 @@ class VendingMachine {
             return PurchaseResult(beverage: nil, change: 0)
         }
         let change = paidAmount - beverage.price
+        paidAmount = 0
         return PurchaseResult(beverage: product, change: change)
     }
     
