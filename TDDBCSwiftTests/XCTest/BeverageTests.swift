@@ -60,6 +60,14 @@ class BeverageTests: XCTestCase {
     // 500円コインを1枚投入してからコーラのボタンを押してコーラを買い、返却ボタンを押すと400円が出てくる
     // お金を投入せずに返却ボタンを押すと何も出てこない
 
+    func test_500円コインを1枚投入してからコーラのボタンを押してコーラを買い返却ボタンを押すと400円が出てくる() {
+        insertMutipleCoins(money: .fiveHundred, times: 1)
+        let item = vendingMachine.dispence(beverage: .cola)
+        XCTAssertEqual(item.beverage, .cola)
+        let returnedMoney = vendingMachine.pushReturnButton()
+        XCTAssertEqual(returnedMoney, 400)
+    }
+
     func test_200円を投入してから返却ボタンを押すと200円が出てくる() {
         insertMutipleCoins(money: .hundred, times: 2)
         let returnedMoney = vendingMachine.pushReturnButton()
