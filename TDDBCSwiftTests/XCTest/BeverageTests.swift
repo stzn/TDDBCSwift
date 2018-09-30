@@ -65,6 +65,10 @@ class BeverageTests: XCTestCase {
     //  コーラの在庫が1の状態でコーラを買い、もう一度コーラを買おうとすると買えない
     //  コーラの在庫が2の状態でコーラを買い、もう一度コーラが買える
 
+    func test_コーラの在庫が1の状態でコーラを買うとコーラが買える() {
+        XCTAssertTrue(vendingMachine.hasStock(of: .cola))
+    }
+    
     func test_お金を投入せずに返却ボタンを押すと何も出てこない() {
         let returnedMoney = vendingMachine.pushReturnButton()
         XCTAssertEqual(returnedMoney, 0)

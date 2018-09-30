@@ -70,6 +70,10 @@ class VendingMachine {
         return paidAmount
     }
     
+    func hasStock(of beverage: Beverage) -> Bool {
+        return true
+    }
+    
     private func availableBeverage(money: Int, beverage: Beverage) -> Beverage? {
         return money < beverage.price ? nil : beverage
     }
