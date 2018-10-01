@@ -25,11 +25,30 @@ class RemoteAlertSenderTests: XCTestCase {
     // リモートと正しく通信してアラートを通知する
     //  xコーラの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す
     //  xコーヒーの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す
-    //  サーバーからエラーが返ってきた場合、エラーレスポンスを返す
+    //  xサーバーからエラーが返ってきた場合、エラーレスポンスを返す
     //  サーバーからレスポンスのステータスコードが399の場合、正常なレスポンスを返す
     //  サーバーからレスポンスのステータスコードが199の場合、エラーレスポンスを返す
     //  サーバーからレスポンスのステータスコードが400の場合、エラーレスポンスを返す
 
+    func test_サーバーからエラーが返ってきた場合_エラーレスポンスを返す() {
+        
+        let url = URL(string: "https://vending.com/alert")!
+        let httpReponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
+        let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: RemoteError.dataNilError)
+        let sender = RemoteAlertSender(urlSession: urlSession)
+        var success: Bool = false
+
+        let exp = expectation(description: "サーバーからエラーが返ってきた場合_エラーレスポンスを返す")
+        sender.sendAlert(of: .cola) { result in
+            success = result
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 3) { error in
+            XCTAssertFalse(success)
+        }
+
+    }
+    
     func test_コーヒーの在庫数が少ないというアラートを正しいRequestでPOST通信した場合_正常なレスポンスを返す() {
         
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
