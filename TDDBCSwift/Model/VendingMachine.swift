@@ -59,10 +59,17 @@ final class VendingMachine {
     }
     
     func insert(money: Coin) {
+//        if isBroken {
+//            return
+//        }
         self.paidAmount += money.rawValue
     }
     
     func avalableBeverages() -> Set<Beverage> {
+//        if isBroken {
+//            return Set()
+//        }
+        
         let allCases = Beverage.allCases
             .filter { availableBeverage(money: paidAmount, beverage: $0) != nil }
         return Set(allCases)
