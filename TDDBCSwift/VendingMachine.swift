@@ -62,8 +62,11 @@ final class VendingMachine {
     
     var paidAmount: Int = 0
     var stocks: [Beverage : Int] = [:]
+    let manager: RemoteStockManageable
+    private let sendAlertUpperLimit = 2
     
-    init(defaultStocks: Int = 1) {
+    init(manager: RemoteStockManageable, defaultStocks: Int = 1) {
+        self.manager = manager
         Beverage.allCases.forEach {
             stocks[$0] = defaultStocks
         }
@@ -79,6 +82,10 @@ final class VendingMachine {
         let change = paidAmount - beverage.price
         paidAmount = change
         stocks[beverage]! = stock - 1
+        
+        if stocks[beverage]! <= sendAlertUpperLimit {
+            manager.sendAlert()
+        }
         return PurchaseResult(beverage: product, change: change)
     }
     

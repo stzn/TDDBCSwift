@@ -11,9 +11,11 @@ import XCTest
 
 class VendingMachineTests: XCTestCase {
     var vendingMachine: VendingMachine!
+    var manager: MockRemoteStockManager!
     
     override func setUp() {
-        vendingMachine = VendingMachine()
+        manager = MockRemoteStockManager()
+        vendingMachine = VendingMachine(manager: manager)
     }
     
     override func tearDown() {
@@ -78,14 +80,16 @@ class VendingMachineTests: XCTestCase {
     //  コーラを購入し、コーラの在庫が2つより多い場合、リモートにアラートを送るメソッドは呼ばれない
     
     func test_コーラを購入し_コーラの在庫が2つになった場合_リモートにアラートを送るメソッドが呼ばれる() {
-        let manager = MockRemoteStockManager()
+        
+        insertMutipleCoins(money: .hundred, times: 1)
+        _ = vendingMachine.dispence(beverage: .cola)
         XCTAssertTrue(manager.sendAlertCalled)
         
     }
     
     func test_コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
         let colaMaxStockCount = Beverage.cola.maxStockCount
-        vendingMachine = VendingMachine(defaultStocks: colaMaxStockCount)
+        vendingMachine = VendingMachine(manager: manager, defaultStocks: colaMaxStockCount)
         vendingMachine.supply(.cola, count: 1)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), colaMaxStockCount)
     }
@@ -113,7 +117,7 @@ class VendingMachineTests: XCTestCase {
     }
     
     func test_コーラの在庫が2の状態でコーラを買いさらにもう一度コーラを買うことができる() {
-        vendingMachine = VendingMachine(defaultStocks: 2)
+        vendingMachine = VendingMachine(manager: manager, defaultStocks: 2)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 2)
         insertMutipleCoins(money: .fiveHundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
@@ -329,8 +333,18 @@ class VendingMachineTests: XCTestCase {
         }
     }
     
-    class MockRemoteStockManager {
-        var sendAlertCalled = true
+    class MockRemoteStockManager: RemoteStockManageable {
+
+        var sendAlertCalled = false
+        var getStockCalled = false
+
+        func sendAlert() {
+            sendAlertCalled = true
+        }
+        
+        func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void) {
+            getStockCalled = true
+        }
     }
 }
 

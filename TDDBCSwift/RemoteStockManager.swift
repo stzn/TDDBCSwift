@@ -14,11 +14,17 @@ protocol RemoteStockFechable {
     func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void)
 }
 
+protocol RemoteStockManageable {
+    func sendAlert()
+    func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void)
+}
+
 struct Stock: Decodable {
     let count: Int
 }
 
-struct RemoteStockManager {
+struct RemoteStockManager: RemoteStockManageable {
+
     let fetcher: RemoteStockFechable
     
     func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void) {
@@ -37,5 +43,8 @@ struct RemoteStockManager {
             }
             completion(stock)
         }
+    }
+    
+    func sendAlert() {
     }
 }
