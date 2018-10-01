@@ -20,7 +20,7 @@ class RemoteStockFetcherTests: XCTestCase {
     }
     
     // TODO
-    // リモートと正しく通信ができる
+    // xリモートと正しく通信ができる
     //   xコーラの在庫数を正しいURLで通信した場合、正常なレスポンスを返す
     //   xコーヒーの在庫数を正しいURLで通信した場合、正常なレスポンスを返す
     //   xサーバーからエラーが返ってきた場合、エラーレスポンスを返す
@@ -28,6 +28,24 @@ class RemoteStockFetcherTests: XCTestCase {
     //   xサーバーからレスポンスのステータスコードが199の場合、エラーレスポンスを返す
     //   xサーバーからレスポンスのステータスコードが400の場合、エラーレスポンスを返す
     //   サーバーからエラではないがデータが返ってこなかった場合、エラーレスポンスを返す
+
+    func test_サーバーからエラではないがデータが返ってこなかった場合_エラーレスポンスを返す() {
+        
+        let url = URL(string: "https://vending.com/stock?name=cola")!
+        let httpReponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
+        let urlSession = MockURLSession(data: nil, urlResponse: httpReponse, error: nil)
+        
+        let exp = expectation(description: "サーバーからエラではないがデータが返ってこなかった場合、エラーレスポンスを返す")
+        let fetcher = RemoteStockFetcher(urlSession: urlSession)
+        var returnedError: Error?
+        fetcher.getStock(of: .cola) { data, error in
+            returnedError = error
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 3) { error in
+            XCTAssertTrue(returnedError is RemoteError)
+        }
+    }
 
     
     func test_サーバーからレスポンスのステータスコードが199の場合_エラーレスポンスを返す() {
