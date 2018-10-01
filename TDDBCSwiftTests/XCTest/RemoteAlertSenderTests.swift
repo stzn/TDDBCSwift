@@ -30,7 +30,25 @@ class RemoteAlertSenderTests: XCTestCase {
     //  サーバーからのレスポンスのステータスコードが199の場合、エラーレスポンスを返す
     //  サーバーからのレスポンスのステータスコードが400の場合、エラーレスポンスを返す
 
-    func test_サーバーからレスポンスのステータスコードが399の場合_正常なレスポンスを返す() {
+    func test_サーバーからのレスポンスのステータスコードが199の場合_エラーレスポンスを返す() {
+    
+        let url = URL(string: "https://vending.com/alert")!
+        let httpReponse = HTTPURLResponse(url: url, statusCode: 199, httpVersion: nil, headerFields: nil)
+        let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: nil)
+        let sender = RemoteAlertSender(urlSession: urlSession)
+        var success: Bool = false
+    
+        let exp = expectation(description: "サーバーからのレスポンスのステータスコードが199の場合、エラーレスポンスを返す")
+        sender.sendAlert(of: .cola) { result in
+            success = result
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 3) { error in
+            XCTAssertFalse(success)
+        }
+    }
+
+    func test_サーバーからのレスポンスのステータスコードが399の場合_正常なレスポンスを返す() {
         
         let url = URL(string: "https://vending.com/alert")!
         let httpReponse = HTTPURLResponse(url: url, statusCode: 399, httpVersion: nil, headerFields: nil)
