@@ -15,6 +15,7 @@ protocol RemoteAlertSendable {
 protocol RemoteStockManageable {
     func sendAlert(completion: @escaping (Bool) -> Void)
     func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void)
+    func getAllStocks(completion: @escaping ([Stock]) -> Void)
 }
 
 struct Stock: Decodable {
@@ -44,7 +45,13 @@ struct RemoteStockManager: RemoteStockManageable {
         }
     }
     
+    func getAllStocks(completion: @escaping ([Stock]) -> Void) {
+        completion([])
+    }
+    
+    
     func sendAlert(completion: @escaping (Bool) -> Void) {
         sender.sendAlert(completion: completion)
     }
+    
 }

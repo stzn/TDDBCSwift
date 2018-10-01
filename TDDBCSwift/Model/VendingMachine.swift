@@ -18,6 +18,10 @@ final class VendingMachine {
     
     init(manager: RemoteStockManageable, defaultStocks: Int = 1) {
         self.manager = manager
+        
+        manager.getAllStocks { stocks in
+        }
+        
         Beverage.allCases.forEach {
             stocks[$0] = defaultStocks
         }

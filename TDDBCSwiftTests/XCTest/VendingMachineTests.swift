@@ -89,10 +89,10 @@ class VendingMachineTests: XCTestCase {
 
     func test_初期化時に_リモートに在庫数を取得するメソッドを呼び_全ての飲み物の在庫数を取得する() {
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 10)
-        XCTAssertEqual(vendingMachine.numberOfStocks(of: .oolongTea), 10)
-        XCTAssertEqual(vendingMachine.numberOfStocks(of: .coffee), 10)
-        XCTAssertEqual(vendingMachine.numberOfStocks(of: .redBull), 10)
-        XCTAssertEqual(vendingMachine.numberOfStocks(of: .beer), 10)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .oolongTea), 15)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .coffee), 20)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .redBull), 25)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .beer), 30)
     }
     
     func test_リモートにアラートを送るメソッドから失敗通知がきた場合_故障中になる() {
@@ -391,7 +391,6 @@ class VendingMachineTests: XCTestCase {
     }
     
     class MockRemoteStockManager: RemoteStockManageable {
-        
         var sendAlertCalled = false
         var getStockCalled = false
 
@@ -403,21 +402,16 @@ class VendingMachineTests: XCTestCase {
         func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void) {
             getStockCalled = true
         }
+
+        func getAllStocks(completion: @escaping ([Stock]) -> Void) {
+            completion([])
+        }
     }
     
-    class MockRemoteErrorStockManager: RemoteStockManageable {
-        
-        var sendAlertCalled = false
-        var getStockCalled = false
-        
-        func sendAlert(completion: @escaping (Bool) -> Void) {
+    class MockRemoteErrorStockManager: MockRemoteStockManager {
+        override func sendAlert(completion: @escaping (Bool) -> Void) {
             sendAlertCalled = true
             completion(false)
-        }
-        
-        func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void) {
-            getStockCalled = true
-            completion(nil)
         }
     }
 }
