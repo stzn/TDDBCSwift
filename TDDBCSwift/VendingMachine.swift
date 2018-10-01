@@ -63,6 +63,7 @@ final class VendingMachine {
     var paidAmount: Int = 0
     var stocks: [Beverage : Int] = [:]
     let manager: RemoteStockManageable
+    var isBroken = false
     private let sendAlertUpperLimit = 2
     
     init(manager: RemoteStockManageable, defaultStocks: Int = 1) {
@@ -90,7 +91,9 @@ final class VendingMachine {
     
     func sendAlertIfNeeded(of beverage: Beverage) {
         if stocks[beverage]! <= sendAlertUpperLimit {
-            manager.sendAlert()
+            manager.sendAlert { [unowned self] success in
+                self.isBroken = !success
+            }
         }
     }
     

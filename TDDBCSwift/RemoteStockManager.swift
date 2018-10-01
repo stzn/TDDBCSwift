@@ -8,16 +8,12 @@
 
 import Foundation
 
-protocol RemoteStockFechable {
-    func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void)
-}
-
 protocol RemoteAlertSendable {
-    func sendAlert()
+    func sendAlert(completion: @escaping (Bool) -> Void)
 }
 
 protocol RemoteStockManageable {
-    func sendAlert()
+    func sendAlert(completion: @escaping (Bool) -> Void)
     func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void)
 }
 
@@ -48,7 +44,7 @@ struct RemoteStockManager: RemoteStockManageable {
         }
     }
     
-    func sendAlert() {
-        sender.sendAlert()
+    func sendAlert(completion: @escaping (Bool) -> Void) {
+        sender.sendAlert(completion: completion)
     }
 }
