@@ -33,12 +33,10 @@ class RemoteStockManagerTests: XCTestCase {
     // x通信モジュールから在庫数が取得できる
     //  xコーラの在庫数をリモートに問い合わせると、コーラの在庫数が取得できる
     //  xコーヒーの在庫数をリモートに問い合わせると、コーヒーの在庫数が取得できる
-    //  xインターネットに繋がっていない場合、リモートに問い合わせされず、在庫数は取得できない
     //  xリモートに問い合わせをするがサーバーがエラーを返した場合、在庫数は取得できない
     //  xリモートに問い合わせをするがサーバーがHTTPレスポンスのエラーコードを返した場合、在庫数は取得できない
     // 在庫数が2つ以下になった時にリモートにアラートを通知する
-    //  アラートをリモートに送るメソッドを呼ぶと、リモートへの通信が開始される
-    //  インターネットに繋がっていない場合、アラートをリモートに送るメソッドを呼んでも、リモートへの通信が開開始されない
+    //  xアラートをリモートに送るメソッドを呼ぶと、リモートへの通信が開始される
 
     func test_アラートをリモートに送るメソッドを呼ぶと_リモートへの通信が開始される() {
         remoteStockManager.sendAlert()
@@ -57,15 +55,6 @@ class RemoteStockManagerTests: XCTestCase {
     func test_リモートに問い合わせをするがサーバーがエラーを返した場合_在庫数は取得できない() {
         
         remoteStockManager = RemoteStockManager(fetcher: MockRemoteErrorFetcher(), sender: sender)
-        
-        remoteStockManager.getStock(of: .cola) { stock in
-            XCTAssertNil(stock)
-        }
-    }
-    
-    func test_インターネットに繋がっていない場合_リモートに問い合わせされず_在庫数は取得できない() {
-        
-        (remoteStockManager.fetcher as! MockRemoteStockFetcher).isOnline = false
         
         remoteStockManager.getStock(of: .cola) { stock in
             XCTAssertNil(stock)
@@ -97,14 +86,7 @@ class RemoteStockManagerTests: XCTestCase {
     
     class MockRemoteStockFetcher: RemoteStockFechable {
         
-        var isOnline = true
-        
         func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
-            
-            guard isOnline else {
-                completion(nil, RemoteError.offlineError)
-                return
-            }
             
             let jsonString: String
             switch beverage {
@@ -139,7 +121,9 @@ class RemoteStockManagerTests: XCTestCase {
     }
     
     class MockRemoteAlertSender: RemoteAlertSendable {
+
         var didSendAlert = false
+        
         func sendAlert() {
             didSendAlert = true
         }
