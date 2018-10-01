@@ -25,11 +25,22 @@ class RemoteStockManagerTests: XCTestCase {
     
     // TODO
     // x通信モジュールから在庫数が取得できる
-    //  xコーラの在庫数をリモート監視に問い合わせると、コーラの在庫数が取得できる
-    //  xコーヒーの在庫数をリモート監視に問い合わせると、コーヒーの在庫数が取得できる
+    //  xコーラの在庫数をリモートに問い合わせると、コーラの在庫数が取得できる
+    //  xコーヒーの在庫数をリモートに問い合わせると、コーヒーの在庫数が取得できる
     //  xインターネットに繋がっていない場合、リモートに問い合わせされず、在庫数は取得できない
     //  xリモートに問い合わせをするがサーバーがエラーを返した場合、在庫数は取得できない
     //  xリモートに問い合わせをするがサーバーがHTTPレスポンスのエラーコードを返した場合、在庫数は取得できない
+    // 在庫数が2つ以下になった時にリモートにアラートを通知する
+    //  アラートをリモートに送るメソッドを呼ぶと、リモートへの通信が開始される
+    //  インターネットに繋がっていない場合、アラートをリモートに送るメソッドを呼んでも、リモートへの通信が開開始されない
+
+    
+    func test_アラートをリモートに送るメソッドを呼ぶと_リモートへの通信が開始される() {
+        
+        let sender = MockRemoteAlertSender()
+        remoteStockManager.sendAlert()
+        XCTAssertTrue(sender.didSendAlert)
+    }
     
     func test_リモートに問い合わせをするがサーバーがHTTPレスポンスのエラーコードを返した場合_在庫数は取得できない() {
         
@@ -121,6 +132,13 @@ class RemoteStockManagerTests: XCTestCase {
         func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
             let data = "{\"count\": 30}".data(using: .utf8)
             completion(data, RemoteError.serverError)
+        }
+    }
+    
+    class MockRemoteAlertSender {
+        var didSendAlert = false
+        func sendAlert() {
+            
         }
     }
 }
