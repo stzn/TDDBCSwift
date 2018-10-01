@@ -85,11 +85,11 @@ class VendingMachineTests: XCTestCase {
     // x飲み物の在庫数をリモートから取得する
     //  x初期化時に、リモートに在庫数を取得するメソッドを呼び、全ての飲み物の在庫数を取得する
     //  xリモートからエラーが返ってきた場合、故障中になる
-    // 故障中の場合、お金が投入できず、どの飲み物のボタンも押せない
+    // x故障中の場合、お金が投入できず、どの飲み物のボタンも押せない
 
     func test_故障中の場合_お金が投入できず_どの飲み物のボタンも押せない() {
-        insertMutipleCoins(money: .hundred, times: 1)
         vendingMachine.isBroken = true
+        insertMutipleCoins(money: .hundred, times: 1)
         XCTAssertEqual(vendingMachine.paidAmount, 0)
         XCTAssertTrue(vendingMachine.avalableBeverages().isEmpty)
     }
