@@ -87,6 +87,12 @@ class VendingMachineTests: XCTestCase {
     //  リモートからエラーが返ってきた場合、故障中になる
 
 
+    func test_リモートからエラーが返ってきた場合_故障中になる() {
+        vendingMachine = VendingMachine(manager: MockRemoteGetAllStocksFailureStockManager())
+        XCTAssertTrue(vendingMachine.isBroken)
+        
+    }
+    
     func test_初期化時に_リモートに在庫数を取得するメソッドを呼び_全ての飲み物の在庫数を取得する() {
 
         manager.setStock(beverage: .cola, count: 10)
@@ -106,7 +112,7 @@ class VendingMachineTests: XCTestCase {
     }
     
     func test_リモートにアラートを送るメソッドから失敗通知がきた場合_故障中になる() {
-        let manager = MockRemoteErrorStockManager()
+        let manager = MockRemoteAlertSendFailureStockManager()
         vendingMachine = VendingMachine(manager: manager)
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
@@ -443,10 +449,17 @@ class VendingMachineTests: XCTestCase {
         }
     }
     
-    class MockRemoteErrorStockManager: MockRemoteStockManager {
+    class MockRemoteAlertSendFailureStockManager: MockRemoteStockManager {
         override func sendAlert(completion: @escaping (Bool) -> Void) {
             sendAlertCalled = true
             completion(false)
+        }
+    }
+    
+    class MockRemoteGetAllStocksFailureStockManager: MockRemoteStockManager {
+        override func getAllStocks(completion: @escaping ([Stock]) -> Void) {
+            getAllStocksCalled = true
+            completion([])
         }
     }
 }
