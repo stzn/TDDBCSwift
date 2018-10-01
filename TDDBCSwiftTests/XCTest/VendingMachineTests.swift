@@ -19,6 +19,8 @@ class VendingMachineTests: XCTestCase {
     }
     
     override func tearDown() {
+        manager = nil
+        vendingMachine = nil
         super.tearDown()
     }
     
@@ -78,8 +80,16 @@ class VendingMachineTests: XCTestCase {
     //  コーラを購入し、コーラの在庫が1つになった場合、リモートにアラートを送るメソッドは呼ばれる
     //  コーラを購入し、コーラの在庫が0になったときに、リモートにアラートを送るメソッドは呼ばれる
     //  コーラを購入し、コーラの在庫が2つより多い場合、リモートにアラートを送るメソッドは呼ばれない
-    
+
+    func test_コーヒーを購入し_コーヒーの在庫が2つになった場合_リモートにアラートを送るメソッドが呼ばれる() {
+        vendingMachine = VendingMachine(manager: manager, defaultStocks: 3)
+        insertMutipleCoins(money: .fiveHundred, times: 1)
+        _ = vendingMachine.dispence(beverage: .coffee)
+        XCTAssertTrue(manager.sendAlertCalled)
+    }
+
     func test_コーラを購入し_コーラの在庫が2つになった場合_リモートにアラートを送るメソッドが呼ばれる() {
+        vendingMachine = VendingMachine(manager: manager, defaultStocks: 3)
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
         XCTAssertTrue(manager.sendAlertCalled)
