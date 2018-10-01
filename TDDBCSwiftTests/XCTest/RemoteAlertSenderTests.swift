@@ -22,7 +22,7 @@ class RemoteAlertSenderTests: XCTestCase {
     }
     
     // TODO
-    // リモートと正しく通信してアラートを通知する
+    // xリモートと正しく通信してアラートを通知する
     //  xコーラの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す
     //  xコーヒーの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す
     //  xサーバーからエラーが返ってきた場合、エラーレスポンスを返す
@@ -32,9 +32,7 @@ class RemoteAlertSenderTests: XCTestCase {
 
     func test_サーバーからのレスポンスのステータスコードが400の場合_エラーレスポンスを返す() {
         
-        let url = URL(string: "https://vending.com/alert")!
-        let httpReponse = HTTPURLResponse(url: url, statusCode: 400, httpVersion: nil, headerFields: nil)
-        let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: nil)
+        let urlSession = createMockURLSessionFrom(statusCode: 400)
         let sender = RemoteAlertSender(urlSession: urlSession)
         var success: Bool = false
         
@@ -50,9 +48,7 @@ class RemoteAlertSenderTests: XCTestCase {
 
     func test_サーバーからのレスポンスのステータスコードが199の場合_エラーレスポンスを返す() {
     
-        let url = URL(string: "https://vending.com/alert")!
-        let httpReponse = HTTPURLResponse(url: url, statusCode: 199, httpVersion: nil, headerFields: nil)
-        let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: nil)
+        let urlSession = createMockURLSessionFrom(statusCode: 199)
         let sender = RemoteAlertSender(urlSession: urlSession)
         var success: Bool = false
     
@@ -68,9 +64,7 @@ class RemoteAlertSenderTests: XCTestCase {
 
     func test_サーバーからのレスポンスのステータスコードが399の場合_正常なレスポンスを返す() {
         
-        let url = URL(string: "https://vending.com/alert")!
-        let httpReponse = HTTPURLResponse(url: url, statusCode: 399, httpVersion: nil, headerFields: nil)
-        let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: nil)
+        let urlSession = createMockURLSessionFrom(statusCode: 399)
         let sender = RemoteAlertSender(urlSession: urlSession)
         var success: Bool = false
         
@@ -87,7 +81,6 @@ class RemoteAlertSenderTests: XCTestCase {
 
     func test_サーバーからエラーが返ってきた場合_エラーレスポンスを返す() {
         
-        let url = URL(string: "https://vending.com/alert")!
         let httpReponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
         let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: RemoteError.dataNilError)
         let sender = RemoteAlertSender(urlSession: urlSession)
@@ -165,4 +158,9 @@ class RemoteAlertSenderTests: XCTestCase {
         return beverage
     }
     
+    private func createMockURLSessionFrom(statusCode: Int) -> MockURLSession {
+        let url = URL(string: "https://vending.com/alert")!
+        let httpReponse = HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: nil)
+        return MockURLSession(data: Data(), urlResponse: httpReponse, error: nil)
+    }
 }
