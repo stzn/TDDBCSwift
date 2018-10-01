@@ -87,6 +87,13 @@ class VendingMachineTests: XCTestCase {
     //  xリモートからエラーが返ってきた場合、故障中になる
     // 故障中の場合、お金が投入できず、どの飲み物のボタンも押せない
 
+    func test_故障中の場合_お金が投入できず_どの飲み物のボタンも押せない() {
+        insertMutipleCoins(money: .hundred, times: 1)
+        vendingMachine.isBroken = true
+        XCTAssertEqual(vendingMachine.paidAmount, 0)
+        XCTAssertTrue(vendingMachine.avalableBeverages().isEmpty)
+    }
+    
     func test_リモートからエラーが返ってきた場合_故障中になる() {
         vendingMachine = VendingMachine(manager: MockRemoteGetAllStocksFailureStockManager())
         XCTAssertTrue(vendingMachine.isBroken)
