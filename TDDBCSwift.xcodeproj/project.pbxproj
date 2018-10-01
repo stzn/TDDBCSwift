@@ -31,6 +31,7 @@
 		D65340452161ED5A00B370DD /* RemoteAlertSenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */; };
 		D65340472161F78B00B370DD /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340462161F78B00B370DD /* MockURLSession.swift */; };
 		D65340492161F94C00B370DD /* RemoteAlertSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340482161F94C00B370DD /* RemoteAlertSender.swift */; };
+		D653404B21620D2F00B370DD /* SessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653404A21620D2F00B370DD /* SessionProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAlertSenderTests.swift; sourceTree = "<group>"; };
 		D65340462161F78B00B370DD /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
 		D65340482161F94C00B370DD /* RemoteAlertSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAlertSender.swift; sourceTree = "<group>"; };
+		D653404A21620D2F00B370DD /* SessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +198,7 @@
 				D653403221616E6800B370DD /* RemoteStockManager.swift */,
 				D65340362161711C00B370DD /* RemoteStockFetcher.swift */,
 				D65340482161F94C00B370DD /* RemoteAlertSender.swift */,
+				D653404A21620D2F00B370DD /* SessionProtocol.swift */,
 			);
 			path = Remote;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D653403D2161CF4700B370DD /* Coin.swift in Sources */,
+				D653404B21620D2F00B370DD /* SessionProtocol.swift in Sources */,
 				D65340372161711C00B370DD /* RemoteStockFetcher.swift in Sources */,
 				62D11D8D1F7F56EC00739528 /* ViewController.swift in Sources */,
 				D653403F2161CF7700B370DD /* PurchaseResult.swift in Sources */,

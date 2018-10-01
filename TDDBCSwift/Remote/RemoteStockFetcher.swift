@@ -72,16 +72,3 @@ struct RemoteStockFetcher: RemoteStockFechable {
     }
 }
 
-typealias ResponseHandler = (Data?, URLResponse?, Error?) -> Void
-
-protocol SessionProtocol {
-    func dataTask(with url: URL,
-                  completionHandler: @escaping ResponseHandler) -> URLSessionDataTask
-    
-    func dataTask(with request: URLRequest,
-                  completionHandler: @escaping ResponseHandler) -> URLSessionDataTask
-}
-
-extension URLSession: SessionProtocol {}
-
-
