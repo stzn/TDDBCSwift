@@ -11,7 +11,7 @@ import Foundation
 typealias ResponseHandler = (Data?, URLResponse?, Error?) -> Void
 
 protocol RemoteStockFechable {
-    func getStocks(of beverage: Beverage, completion: @escaping ResponseHandler)
+    func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void)
 }
 
 struct Stock: Decodable {
@@ -23,22 +23,14 @@ struct RemoteStockManager {
     
     func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void) {
         
-        fetcher.getStocks(of: beverage) { data, response, error in
-            if error != nil {
-                completion(nil)
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse,
-                200..<400 ~= response.statusCode else {
+        fetcher.getStock(of: beverage) { data, error in
+            guard error == nil,
+                let data = data
+                else {
                     completion(nil)
                     return
             }
             
-            guard let data = data else {
-                completion(nil)
-                return
-            }
             guard let stock = try? JSONDecoder().decode(Stock.self, from: data) else {
                 completion(nil)
                 return
@@ -47,4 +39,3 @@ struct RemoteStockManager {
         }
     }
 }
-

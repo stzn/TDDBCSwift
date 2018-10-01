@@ -23,6 +23,7 @@
 		D653403321616E6800B370DD /* RemoteStockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403221616E6800B370DD /* RemoteStockManager.swift */; };
 		D653403521616F0B00B370DD /* RemoteStockFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403421616F0B00B370DD /* RemoteStockFetcherTests.swift */; };
 		D65340372161711C00B370DD /* RemoteStockFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340362161711C00B370DD /* RemoteStockFetcher.swift */; };
+		D65340392161960D00B370DD /* RemoteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340382161960D00B370DD /* RemoteError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		D653403221616E6800B370DD /* RemoteStockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteStockManager.swift; sourceTree = "<group>"; };
 		D653403421616F0B00B370DD /* RemoteStockFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteStockFetcherTests.swift; sourceTree = "<group>"; };
 		D65340362161711C00B370DD /* RemoteStockFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteStockFetcher.swift; sourceTree = "<group>"; };
+		D65340382161960D00B370DD /* RemoteError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				D60AC513215F38B50000162A /* VendingMachine.swift */,
 				D653403221616E6800B370DD /* RemoteStockManager.swift */,
 				D65340362161711C00B370DD /* RemoteStockFetcher.swift */,
+				D65340382161960D00B370DD /* RemoteError.swift */,
 			);
 			path = TDDBCSwift;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 			files = (
 				D65340372161711C00B370DD /* RemoteStockFetcher.swift in Sources */,
 				62D11D8D1F7F56EC00739528 /* ViewController.swift in Sources */,
+				D65340392161960D00B370DD /* RemoteError.swift in Sources */,
 				62D11D8B1F7F56EC00739528 /* AppDelegate.swift in Sources */,
 				D653403321616E6800B370DD /* RemoteStockManager.swift in Sources */,
 				2475E28BE43743071E748308 /* Sample.swift in Sources */,

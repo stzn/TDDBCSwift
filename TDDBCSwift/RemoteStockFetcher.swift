@@ -12,14 +12,30 @@ struct RemoteStockFetcher: RemoteStockFechable {
 
     let urlSession: SessionProtocol
     
-    func getStocks(of beverage: Beverage, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
 
         guard let url = URL(string: "https://vending.com/stock?name=\(beverage.rawValue)") else {
-            completion(nil, nil, RemoteError.invlidURLError)
+            completion(nil, RemoteError.invlidURLError)
             return
         }
+        
         urlSession.dataTask(with: url) { data, response, error in
-            completion(data, response, error)
+            if error != nil {
+                completion(nil, RemoteError.clientError(error!))
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse,
+                200..<400 ~= response.statusCode else {
+                    completion(nil, RemoteError.serverError)
+                    return
+            }
+            
+            guard let data = data else {
+                completion(nil, RemoteError.dataNilError)
+                return
+            }
+            completion(data, nil)
         }.resume()
     }
 }

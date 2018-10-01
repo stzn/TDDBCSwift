@@ -85,10 +85,10 @@ class RemoteStockManagerTests: XCTestCase {
         
         var isOnline = true
         
-        func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
+        func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
             
             guard isOnline else {
-                completion(nil, nil, RemoteError.offlineError)
+                completion(nil, RemoteError.offlineError)
                 return
             }
             
@@ -105,26 +105,22 @@ class RemoteStockManagerTests: XCTestCase {
             case .beer:
                 jsonString = "{\"count\": 30}"
             }
-            let data = jsonString.data(using: .utf8)
-            
-            let url = URL(string: "hogehoge")!
-            let httpResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
-            completion(data, httpResponse, nil)
+            let data = jsonString.data(using: .utf8)            
+            completion(data, nil)
         }
     }
     
     class MockRemoteErrorFetcher: RemoteStockFechable {
-        func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
-            completion(nil, HTTPURLResponse(), RemoteError.serverError)
+        func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
+            let error = NSError(domain: "error", code: 999, userInfo: nil)
+            completion(nil, RemoteError.clientError(error))
         }
     }
     
     class MockRemoteHttpResponseErrorFetcher: RemoteStockFechable {
-        func getStocks(of beverage: Beverage, completion: (Data?, URLResponse?, Error?) -> Void) {
-            let url = URL(string: "hogehoge")!
-            let httpResponse = HTTPURLResponse(url: url, statusCode: 500, httpVersion: nil, headerFields: nil)
+        func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
             let data = "{\"count\": 30}".data(using: .utf8)
-            completion(data, httpResponse, nil)
+            completion(data, RemoteError.serverError)
         }
     }
 }
