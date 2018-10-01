@@ -30,6 +30,23 @@ class RemoteStockFetcherTests: XCTestCase {
     //   xサーバーからエラーではないがデータが返ってこなかった場合、エラーレスポンスを返す
     // リモートと正しく通信して全ての在庫数を取得する
 
+    func test_リモートと正しく通信して全ての在庫数を取得する() {
+        
+        let url = URL(string: "https://vending.com/stocks")!
+        let urlSession = createMockURLSessionFrom(url: url, statusCode: 200)
+        let exp = expectation(description: "リモートと正しく通信して全ての在庫数を取得する")
+        let fetcher = RemoteStockFetcher(urlSession: urlSession)
+        var returnedData: Data?
+        fetcher.getStocks() { data, error in
+            returnedData = data
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 3) { error in
+            XCTAssertEqual(urlSession.url, url)
+            XCTAssertNotNil(returnedData)
+        }
+    }
+    
     func test_サーバーからエラーではないがデータが返ってこなかった場合_エラーレスポンスを返す() {
         
         let url = URL(string: "https://vending.com/stock?name=cola")!

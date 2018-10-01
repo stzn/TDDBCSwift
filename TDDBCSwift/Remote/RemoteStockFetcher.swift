@@ -10,6 +10,7 @@ import Foundation
 
 protocol RemoteStockFechable {
     func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void)
+    func getStocks(completion: @escaping (Data?, Error?) -> Void)
 }
 
 struct RemoteStockFetcher: RemoteStockFechable {
@@ -41,6 +42,10 @@ struct RemoteStockFetcher: RemoteStockFechable {
             }
             completion(data, nil)
         }.resume()
+    }
+    
+    func getStocks(completion: @escaping (Data?, Error?) -> Void) {
+        completion(nil, nil)
     }
 }
 

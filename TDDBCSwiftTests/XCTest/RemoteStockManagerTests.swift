@@ -105,17 +105,21 @@ class RemoteStockManagerTests: XCTestCase {
             let data = jsonString.data(using: .utf8)            
             completion(data, nil)
         }
+        
+        func getStocks(completion: @escaping (Data?, Error?) -> Void) {
+            completion(nil, nil)
+        }
     }
     
-    class MockRemoteErrorFetcher: RemoteStockFechable {
-        func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
+    class MockRemoteErrorFetcher: MockRemoteStockFetcher {
+        override func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
             let error = NSError(domain: "error", code: 999, userInfo: nil)
             completion(nil, RemoteError.clientError(error))
         }
     }
     
-    class MockRemoteHttpResponseErrorFetcher: RemoteStockFechable {
-        func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
+    class MockRemoteHttpResponseErrorFetcher: MockRemoteStockFetcher {
+        override func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
             let data = "{\"count\": 30}".data(using: .utf8)
             completion(data, RemoteError.serverError)
         }
