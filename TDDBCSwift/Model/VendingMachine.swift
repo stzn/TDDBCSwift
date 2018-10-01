@@ -16,7 +16,7 @@ final class VendingMachine {
     var isBroken = false
     private let sendAlertUpperLimit = 2
     
-    init(manager: RemoteStockManageable, defaultStocks: Int = 1) {
+    init(manager: RemoteStockManageable) {
         self.manager = manager
         
         manager.getAllStocks { stocks in

@@ -27,6 +27,7 @@
 		D653403B2161CF1600B370DD /* Beverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403A2161CF1600B370DD /* Beverage.swift */; };
 		D653403D2161CF4700B370DD /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403C2161CF4700B370DD /* Coin.swift */; };
 		D653403F2161CF7700B370DD /* PurchaseResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403E2161CF7700B370DD /* PurchaseResult.swift */; };
+		D65340432161ECC000B370DD /* Stock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340422161ECC000B370DD /* Stock.swift */; };
 		D65340452161ED5A00B370DD /* RemoteAlertSenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,7 @@
 		D653403A2161CF1600B370DD /* Beverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Beverage.swift; sourceTree = "<group>"; };
 		D653403C2161CF4700B370DD /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		D653403E2161CF7700B370DD /* PurchaseResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseResult.swift; sourceTree = "<group>"; };
+		D65340422161ECC000B370DD /* Stock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stock.swift; sourceTree = "<group>"; };
 		D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAlertSenderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -178,6 +180,7 @@
 				D653403C2161CF4700B370DD /* Coin.swift */,
 				D653403E2161CF7700B370DD /* PurchaseResult.swift */,
 				D65340382161960D00B370DD /* RemoteError.swift */,
+				D65340422161ECC000B370DD /* Stock.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				62D11D8B1F7F56EC00739528 /* AppDelegate.swift in Sources */,
 				D653403321616E6800B370DD /* RemoteStockManager.swift in Sources */,
 				2475E28BE43743071E748308 /* Sample.swift in Sources */,
+				D65340432161ECC000B370DD /* Stock.swift in Sources */,
 				D60AC514215F38B50000162A /* VendingMachine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

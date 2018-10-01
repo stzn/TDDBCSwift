@@ -83,7 +83,7 @@ class VendingMachineTests: XCTestCase {
     //  xコーラを購入しようとしたが、コーラの在庫が0であった場合、リモートにアラートを送るメソッドは呼ばれない
     //  xリモートにアラートを送るメソッドから失敗通知がきた場合、故障中になる
     // 飲み物の在庫数をリモートから取得する
-    //  初期化時に、リモートに在庫数を取得するメソッドを呼び、全ての飲み物の在庫数を取得する
+    //  x初期化時に、リモートに在庫数を取得するメソッドを呼び、全ての飲み物の在庫数を取得する
     //  リモートからエラーが返ってきた場合、故障中になる
 
 
@@ -95,7 +95,7 @@ class VendingMachineTests: XCTestCase {
         manager.setStock(beverage: .redBull, count: 25)
         manager.setStock(beverage: .beer, count: 30)
 
-        vendingMachine = VendingMachine(manager: manager, defaultStocks: 4)
+        vendingMachine = VendingMachine(manager: manager)
         
         XCTAssertTrue(manager.getAllStocksCalled)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 10)
@@ -116,7 +116,7 @@ class VendingMachineTests: XCTestCase {
 
     func test_コーラを購入し_コーラの在庫が2つより多い場合_リモートにアラートを送るメソッドは呼ばれない() {
         manager.setStock(beverage: .cola, count: 4)
-        vendingMachine = VendingMachine(manager: manager, defaultStocks: 4)
+        vendingMachine = VendingMachine(manager: manager)
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 3)
@@ -124,7 +124,7 @@ class VendingMachineTests: XCTestCase {
     }
 
     func test_コーラを購入し_コーラの在庫が0になった場合_リモートにアラートを送るメソッドは呼ばれる() {
-        vendingMachine = VendingMachine(manager: manager, defaultStocks: 1)
+        vendingMachine = VendingMachine(manager: manager)
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 0)
@@ -133,7 +133,7 @@ class VendingMachineTests: XCTestCase {
 
     func test_コーラを購入し_コーラの在庫が1つになった場合_リモートにアラートを送るメソッドは呼ばれる() {
         manager.setStock(beverage: .cola, count: 2)
-        vendingMachine = VendingMachine(manager: manager, defaultStocks: 2)
+        vendingMachine = VendingMachine(manager: manager)
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 1)
@@ -142,7 +142,7 @@ class VendingMachineTests: XCTestCase {
 
     func test_コーヒーを購入し_コーヒーの在庫が2つになった場合_リモートにアラートを送るメソッドが呼ばれる() {
         manager.setStock(beverage: .coffee, count: 3)
-        vendingMachine = VendingMachine(manager: manager, defaultStocks: 3)
+        vendingMachine = VendingMachine(manager: manager)
         insertMutipleCoins(money: .fiveHundred, times: 1)
         _ = vendingMachine.dispence(beverage: .coffee)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .coffee), 2)
@@ -151,7 +151,7 @@ class VendingMachineTests: XCTestCase {
 
     func test_コーラを購入し_コーラの在庫が2つになった場合_リモートにアラートを送るメソッドが呼ばれる() {
         manager.setStock(beverage: .cola, count: 3)
-        vendingMachine = VendingMachine(manager: manager, defaultStocks: 3)
+        vendingMachine = VendingMachine(manager: manager)
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 2)
@@ -161,7 +161,7 @@ class VendingMachineTests: XCTestCase {
     func test_コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
         let colaMaxStockCount = Beverage.cola.maxStockCount
         manager.setStock(beverage: .cola, count: colaMaxStockCount)
-        vendingMachine = VendingMachine(manager: manager, defaultStocks: colaMaxStockCount)
+        vendingMachine = VendingMachine(manager: manager)
         vendingMachine.supply(.cola, count: 1)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), colaMaxStockCount)
     }
@@ -190,7 +190,7 @@ class VendingMachineTests: XCTestCase {
     
     func test_コーラの在庫が2の状態でコーラを買いさらにもう一度コーラを買うことができる() {
         manager.setStock(beverage: .cola, count: 2)
-        vendingMachine = VendingMachine(manager: manager, defaultStocks: 2)
+        vendingMachine = VendingMachine(manager: manager)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 2)
         insertMutipleCoins(money: .fiveHundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
