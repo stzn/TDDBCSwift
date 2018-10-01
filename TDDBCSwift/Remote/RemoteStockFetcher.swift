@@ -8,8 +8,6 @@
 
 import Foundation
 
-typealias ResponseHandler = (Data?, URLResponse?, Error?) -> Void
-
 protocol RemoteStockFechable {
     func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void)
 }
@@ -45,6 +43,8 @@ struct RemoteStockFetcher: RemoteStockFechable {
         }.resume()
     }
 }
+
+typealias ResponseHandler = (Data?, URLResponse?, Error?) -> Void
 
 protocol SessionProtocol {
     func dataTask(with url: URL,

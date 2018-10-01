@@ -24,6 +24,9 @@
 		D653403521616F0B00B370DD /* RemoteStockFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403421616F0B00B370DD /* RemoteStockFetcherTests.swift */; };
 		D65340372161711C00B370DD /* RemoteStockFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340362161711C00B370DD /* RemoteStockFetcher.swift */; };
 		D65340392161960D00B370DD /* RemoteError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340382161960D00B370DD /* RemoteError.swift */; };
+		D653403B2161CF1600B370DD /* Beverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403A2161CF1600B370DD /* Beverage.swift */; };
+		D653403D2161CF4700B370DD /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403C2161CF4700B370DD /* Coin.swift */; };
+		D653403F2161CF7700B370DD /* PurchaseResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403E2161CF7700B370DD /* PurchaseResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +65,9 @@
 		D653403421616F0B00B370DD /* RemoteStockFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteStockFetcherTests.swift; sourceTree = "<group>"; };
 		D65340362161711C00B370DD /* RemoteStockFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteStockFetcher.swift; sourceTree = "<group>"; };
 		D65340382161960D00B370DD /* RemoteError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteError.swift; sourceTree = "<group>"; };
+		D653403A2161CF1600B370DD /* Beverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Beverage.swift; sourceTree = "<group>"; };
+		D653403C2161CF4700B370DD /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
+		D653403E2161CF7700B370DD /* PurchaseResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +116,8 @@
 		62D11D891F7F56EC00739528 /* TDDBCSwift */ = {
 			isa = PBXGroup;
 			children = (
+				D65340412161D03B00B370DD /* Remote */,
+				D65340402161CF9400B370DD /* Model */,
 				62D11D8A1F7F56EC00739528 /* AppDelegate.swift */,
 				62D11D911F7F56EC00739528 /* Assets.xcassets */,
 				62D11D961F7F56EC00739528 /* Info.plist */,
@@ -117,10 +125,6 @@
 				62D11D8E1F7F56EC00739528 /* Main.storyboard */,
 				2475E38E726EC3D670B210AF /* Sample.swift */,
 				62D11D8C1F7F56EC00739528 /* ViewController.swift */,
-				D60AC513215F38B50000162A /* VendingMachine.swift */,
-				D653403221616E6800B370DD /* RemoteStockManager.swift */,
-				D65340362161711C00B370DD /* RemoteStockFetcher.swift */,
-				D65340382161960D00B370DD /* RemoteError.swift */,
 			);
 			path = TDDBCSwift;
 			sourceTree = "<group>";
@@ -161,6 +165,27 @@
 				62D11DB11F7F601E00739528 /* Quick.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D65340402161CF9400B370DD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D60AC513215F38B50000162A /* VendingMachine.swift */,
+				D653403A2161CF1600B370DD /* Beverage.swift */,
+				D653403C2161CF4700B370DD /* Coin.swift */,
+				D653403E2161CF7700B370DD /* PurchaseResult.swift */,
+				D65340382161960D00B370DD /* RemoteError.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D65340412161D03B00B370DD /* Remote */ = {
+			isa = PBXGroup;
+			children = (
+				D653403221616E6800B370DD /* RemoteStockManager.swift */,
+				D65340362161711C00B370DD /* RemoteStockFetcher.swift */,
+			);
+			path = Remote;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,8 +312,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D653403D2161CF4700B370DD /* Coin.swift in Sources */,
 				D65340372161711C00B370DD /* RemoteStockFetcher.swift in Sources */,
 				62D11D8D1F7F56EC00739528 /* ViewController.swift in Sources */,
+				D653403F2161CF7700B370DD /* PurchaseResult.swift in Sources */,
+				D653403B2161CF1600B370DD /* Beverage.swift in Sources */,
 				D65340392161960D00B370DD /* RemoteError.swift in Sources */,
 				62D11D8B1F7F56EC00739528 /* AppDelegate.swift in Sources */,
 				D653403321616E6800B370DD /* RemoteStockManager.swift in Sources */,

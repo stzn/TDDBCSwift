@@ -8,56 +8,6 @@
 
 import Foundation
 
-enum Beverage: String, CaseIterable, Hashable {
-    case cola
-    case oolongTea
-    case coffee
-    case redBull
-    case beer
-    
-    var price: Int {
-        switch self {
-        case .cola:
-            return 100
-        case .oolongTea:
-            return 100
-        case .coffee:
-            return 300
-        case .redBull:
-            return 200
-        case .beer:
-            return 600
-        }
-    }
-    
-    var maxStockCount: Int {
-        switch self {
-        case .cola:
-            return 10
-        case .oolongTea:
-            return 15
-        case .coffee:
-            return 20
-        case .redBull:
-            return 100
-        case .beer:
-            return 1000
-        }
-    }
-}
-
-enum Coin: Int {
-    case ten = 10
-    case fifty = 50
-    case hundred = 100
-    case fiveHundred = 500
-}
-
-struct PurchaseResult {
-    let beverage: Beverage?
-    let change: Int
-}
-
 final class VendingMachine {
     
     var paidAmount: Int = 0
