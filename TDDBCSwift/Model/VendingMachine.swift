@@ -19,7 +19,13 @@ final class VendingMachine {
     init(manager: RemoteStockManageable) {
         self.manager = manager
         
-        manager.getAllStocks { stocks in
+        manager.getAllStocks { [unowned self] stocks in
+
+            guard !stocks.isEmpty else {
+                self.isBroken = true
+                return
+            }
+            
             self.stocks = stocks.reduce([Beverage:Int]()) { (result, stock) -> [Beverage: Int] in
                 var result = result
                 result[stock.beverage] = stock.count
