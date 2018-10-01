@@ -27,6 +27,7 @@
 		D653403B2161CF1600B370DD /* Beverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403A2161CF1600B370DD /* Beverage.swift */; };
 		D653403D2161CF4700B370DD /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403C2161CF4700B370DD /* Coin.swift */; };
 		D653403F2161CF7700B370DD /* PurchaseResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403E2161CF7700B370DD /* PurchaseResult.swift */; };
+		D65340452161ED5A00B370DD /* RemoteAlertSenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		D653403A2161CF1600B370DD /* Beverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Beverage.swift; sourceTree = "<group>"; };
 		D653403C2161CF4700B370DD /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		D653403E2161CF7700B370DD /* PurchaseResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseResult.swift; sourceTree = "<group>"; };
+		D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAlertSenderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 				D60AC511215F36FD0000162A /* VendingMachineTests.swift */,
 				D653403021616CBC00B370DD /* RemoteStockManagerTests.swift */,
 				D653403421616F0B00B370DD /* RemoteStockFetcherTests.swift */,
+				D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */,
 			);
 			path = XCTest;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				62D11DAD1F7F580E00739528 /* ExampleQuickTests.swift in Sources */,
+				D65340452161ED5A00B370DD /* RemoteAlertSenderTests.swift in Sources */,
 				D653403121616CBC00B370DD /* RemoteStockManagerTests.swift in Sources */,
 				D653403521616F0B00B370DD /* RemoteStockFetcherTests.swift in Sources */,
 				62D11DA01F7F56EC00739528 /* ExampleXCTestTests.swift in Sources */,
