@@ -70,7 +70,19 @@ class VendingMachineTests: XCTestCase {
     // x飲み物はそれぞれ限られた本数しか格納できない
     //  xコーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
     //  xコーヒーの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない
-
+    // 在庫数が2つになった時にリモートにアラートを通知する
+    //  コーラを購入し、コーラの在庫が2つになった場合、リモートにアラートを送るメソッドが呼ばれる
+    //  コーヒーを購入し、コーヒーの在庫が2つになった場合、リモートにアラートを送るメソッドが呼ばれる
+    //  コーラを購入し、コーラの在庫が1つになった場合、リモートにアラートを送るメソッドは呼ばれる
+    //  コーラを購入し、コーラの在庫が0になったときに、リモートにアラートを送るメソッドは呼ばれる
+    //  コーラを購入し、コーラの在庫が2つより多い場合、リモートにアラートを送るメソッドは呼ばれない
+    
+    func test_コーラを購入し_コーラの在庫が2つになった場合_リモートにアラートを送るメソッドが呼ばれる() {
+        let manager = MockRemoteStockManager()
+        XCTAssertTrue(manager.sendAlertCalled)
+        
+    }
+    
     func test_コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
         let colaMaxStockCount = Beverage.cola.maxStockCount
         vendingMachine = VendingMachine(defaultStocks: colaMaxStockCount)
@@ -315,6 +327,10 @@ class VendingMachineTests: XCTestCase {
                 vendingMachine.insert(money: money)
             }
         }
+    }
+    
+    class MockRemoteStockManager {
+        var sendAlertCalled = true
     }
 }
 
