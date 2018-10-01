@@ -83,10 +83,15 @@ final class VendingMachine {
         paidAmount = change
         stocks[beverage]! = stock - 1
         
+        sendAlertIfNeeded(of: beverage)
+        
+        return PurchaseResult(beverage: product, change: change)
+    }
+    
+    func sendAlertIfNeeded(of beverage: Beverage) {
         if stocks[beverage]! <= sendAlertUpperLimit {
             manager.sendAlert()
         }
-        return PurchaseResult(beverage: product, change: change)
     }
     
     func insert(money: Coin) {
