@@ -21,22 +21,31 @@ class RemoteAlertSenderTests: XCTestCase {
     
     // TODO
     // リモートと正しく通信してアラートを通知する
-    //  コーラの在庫数が少ないというアラートを正しいURLで通信した場合、正常なレスポンスを返す
-    //  コーヒーの在庫数が少ないというアラートを正しいURLで通信した場合、正常なレスポンスを返す
+    //  コーラの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す
+    //  コーヒーの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す
     //  サーバーからエラーが返ってきた場合、エラーレスポンスを返す
     //  サーバーからレスポンスのステータスコードが399の場合、正常なレスポンスを返す
     //  サーバーからレスポンスのステータスコードが199の場合、エラーレスポンスを返す
     //  サーバーからレスポンスのステータスコードが400の場合、エラーレスポンスを返す
     
-    func test_コーラの在庫数が少ないというアラートを正しいURLで通信した場合_正常なレスポンスを返す() {
+    func test_コーラの在庫数が少ないというアラートを正しいRequestで通信した場合_正常なレスポンスを返す() {
         
-        let sender = RemoteAlertSender()
+        let url = URL(string: "https://vending.com/alert")!
+        let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
+        let urlSession = MockURLSession(data: Data(), urlResponse: response, error: nil)
+        let sender = RemoteAlertSender(urlSession: urlSession)
         var success: Bool = false
-        sender.sendAlert { result in
+        
+        let exp = expectation(description: "コーラの在庫数が少ないというアラートを正しいRequestで通信した場合_正常なレスポンスを返す")
+        sender.sendAlert(of: .cola) { result in
             success = result
+            exp.fulfill()
         }
-        XCTAssertTrue(success)
-
+        waitForExpectations(timeout: 3) { error in
+            XCTAssertNotNil(urlSession.request?.httpBody)
+            XCTAssertEqual(urlSession.request?.httpMethod, "POST")
+            XCTAssertTrue(success)
+        }
     }
     
 }

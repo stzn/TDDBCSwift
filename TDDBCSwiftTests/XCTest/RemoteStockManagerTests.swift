@@ -39,7 +39,7 @@ class RemoteStockManagerTests: XCTestCase {
     //   xアラートをリモートに送るメソッドを呼ぶと、リモートへの通信が開始される
 
     func test_アラートをリモートに送るメソッドを呼ぶと_リモートへの通信が開始される() {
-        remoteStockManager.sendAlert { result in
+        remoteStockManager.sendAlert(of: .cola) { result in
             XCTAssertTrue(result)
         }
     }
@@ -124,9 +124,11 @@ class RemoteStockManagerTests: XCTestCase {
     class MockRemoteAlertSender: RemoteAlertSendable {
         
         var didSendAlert = false
-
-        func sendAlert(completion: @escaping (Bool) -> Void) {
+        var beverage: Beverage?
+        
+        func sendAlert(of beverage: Beverage, completion: @escaping (Bool) -> Void) {
             didSendAlert = true
+            self.beverage = beverage
             completion(true)
         }
     }

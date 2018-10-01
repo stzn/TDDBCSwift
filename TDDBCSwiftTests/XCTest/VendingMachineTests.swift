@@ -433,7 +433,7 @@ class VendingMachineTests: XCTestCase {
             Stock(beverage: .beer, count: 1)
         ]
         
-        func sendAlert(completion: @escaping (Bool) -> Void) {
+        func sendAlert(of beverage: Beverage, completion: @escaping (Bool) -> Void) {
             sendAlertCalled = true
             completion(true)
         }
@@ -457,7 +457,7 @@ class VendingMachineTests: XCTestCase {
     }
     
     class MockRemoteAlertSendFailureStockManager: MockRemoteStockManager {
-        override func sendAlert(completion: @escaping (Bool) -> Void) {
+        override func sendAlert(of beverage: Beverage, completion: @escaping (Bool) -> Void) {
             sendAlertCalled = true
             completion(false)
         }
