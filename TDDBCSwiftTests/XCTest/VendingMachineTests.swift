@@ -82,7 +82,19 @@ class VendingMachineTests: XCTestCase {
     //  xコーラを購入し、コーラの在庫が2つより多い場合、リモートにアラートを送るメソッドは呼ばれない
     //  xコーラを購入しようとしたが、コーラの在庫が0であった場合、リモートにアラートを送るメソッドは呼ばれない
     //  xリモートにアラートを送るメソッドから失敗通知がきた場合、故障中になる
+    // 飲み物の在庫数をリモートから取得する
+    //  初期化時に、リモートに在庫数を取得するメソッドを呼び、全ての飲み物の在庫数を取得する
+    //  リモートからエラーが返ってきた場合、故障中になる
 
+
+    func test_初期化時に_リモートに在庫数を取得するメソッドを呼び_全ての飲み物の在庫数を取得する() {
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 10)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .oolongTea), 10)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .coffee), 10)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .redBull), 10)
+        XCTAssertEqual(vendingMachine.numberOfStocks(of: .beer), 10)
+    }
+    
     func test_リモートにアラートを送るメソッドから失敗通知がきた場合_故障中になる() {
         let manager = MockRemoteErrorStockManager()
         vendingMachine = VendingMachine(manager: manager)
