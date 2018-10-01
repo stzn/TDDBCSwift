@@ -11,6 +11,8 @@ import XCTest
 
 class RemoteAlertSenderTests: XCTestCase {
 
+    let url = URL(string: "https://vending.com/alert")!
+    
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -22,15 +24,14 @@ class RemoteAlertSenderTests: XCTestCase {
     // TODO
     // リモートと正しく通信してアラートを通知する
     //  xコーラの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す
-    //  コーヒーの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す
+    //  xコーヒーの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す
     //  サーバーからエラーが返ってきた場合、エラーレスポンスを返す
     //  サーバーからレスポンスのステータスコードが399の場合、正常なレスポンスを返す
     //  サーバーからレスポンスのステータスコードが199の場合、エラーレスポンスを返す
     //  サーバーからレスポンスのステータスコードが400の場合、エラーレスポンスを返す
 
     func test_コーヒーの在庫数が少ないというアラートを正しいRequestでPOST通信した場合_正常なレスポンスを返す() {
-
-        let url = URL(string: "https://vending.com/alert")!
+        
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
         let urlSession = MockURLSession(data: Data(), urlResponse: response, error: nil)
         let sender = RemoteAlertSender(urlSession: urlSession)
@@ -43,10 +44,7 @@ class RemoteAlertSenderTests: XCTestCase {
         }
         waitForExpectations(timeout: 3) { error in
             
-            let data = urlSession.request?.httpBody ?? Data()
-            guard let parameter = try? JSONDecoder().decode([String: String].self, from: data),
-                let name = parameter["name"],
-                let beverage = Beverage(rawValue: name) else {
+            guard let beverage = self.getBeverage(body: urlSession.request?.httpBody) else {
                 XCTFail()
                 return
             }
@@ -58,7 +56,6 @@ class RemoteAlertSenderTests: XCTestCase {
     
     func test_コーラの在庫数が少ないというアラートを正しいRequestで通信した場合_正常なレスポンスを返す() {
         
-        let url = URL(string: "https://vending.com/alert")!
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
         let urlSession = MockURLSession(data: Data(), urlResponse: response, error: nil)
         let sender = RemoteAlertSender(urlSession: urlSession)
@@ -71,10 +68,7 @@ class RemoteAlertSenderTests: XCTestCase {
         }
         waitForExpectations(timeout: 3) { error in
 
-            let data = urlSession.request?.httpBody ?? Data()
-            guard let parameter = try? JSONDecoder().decode([String: String].self, from: data),
-                let name = parameter["name"],
-                let beverage = Beverage(rawValue: name) else {
+            guard let beverage = self.getBeverage(body: urlSession.request?.httpBody) else {
                     XCTFail()
                     return
             }
@@ -82,6 +76,19 @@ class RemoteAlertSenderTests: XCTestCase {
             XCTAssertEqual(urlSession.request?.httpMethod, "POST")
             XCTAssertTrue(success)
         }
+    }
+    
+    private func getBeverage(body: Data?) -> Beverage? {
+        
+        guard
+            let body = body,
+            let parameter = try? JSONDecoder().decode([String: String].self, from: body),
+            let name = parameter["name"],
+            let beverage = Beverage(rawValue: name)
+            else {
+                return nil
+        }
+        return beverage
     }
     
 }
