@@ -12,14 +12,20 @@ import XCTest
 class RemoteStockManagerTests: XCTestCase {
 
     var remoteStockManager: RemoteStockManager!
+    var fetcher: MockRemoteStockFetcher!
+    var sender: MockRemoteAlertSender!
 
     override func setUp() {
         super.setUp()
-        remoteStockManager = RemoteStockManager(fetcher: MockRemoteStockFetcher())
+        fetcher = MockRemoteStockFetcher()
+        sender = MockRemoteAlertSender()
+        remoteStockManager = RemoteStockManager(fetcher: fetcher, sender: sender)
     }
 
     override func tearDown() {
         remoteStockManager = nil
+        fetcher = nil
+        sender = nil
         super.tearDown()
     }
     
@@ -34,17 +40,14 @@ class RemoteStockManagerTests: XCTestCase {
     //  アラートをリモートに送るメソッドを呼ぶと、リモートへの通信が開始される
     //  インターネットに繋がっていない場合、アラートをリモートに送るメソッドを呼んでも、リモートへの通信が開開始されない
 
-    
     func test_アラートをリモートに送るメソッドを呼ぶと_リモートへの通信が開始される() {
-        
-        let sender = MockRemoteAlertSender()
         remoteStockManager.sendAlert()
         XCTAssertTrue(sender.didSendAlert)
     }
     
     func test_リモートに問い合わせをするがサーバーがHTTPレスポンスのエラーコードを返した場合_在庫数は取得できない() {
         
-        remoteStockManager = RemoteStockManager(fetcher: MockRemoteHttpResponseErrorFetcher())
+        remoteStockManager = RemoteStockManager(fetcher: MockRemoteHttpResponseErrorFetcher(), sender: sender)
         
         remoteStockManager.getStock(of: .cola) { stock in
             XCTAssertNil(stock)
@@ -53,7 +56,7 @@ class RemoteStockManagerTests: XCTestCase {
     
     func test_リモートに問い合わせをするがサーバーがエラーを返した場合_在庫数は取得できない() {
         
-        remoteStockManager = RemoteStockManager(fetcher: MockRemoteErrorFetcher())
+        remoteStockManager = RemoteStockManager(fetcher: MockRemoteErrorFetcher(), sender: sender)
         
         remoteStockManager.getStock(of: .cola) { stock in
             XCTAssertNil(stock)
@@ -135,10 +138,10 @@ class RemoteStockManagerTests: XCTestCase {
         }
     }
     
-    class MockRemoteAlertSender {
+    class MockRemoteAlertSender: RemoteAlertSendable {
         var didSendAlert = false
         func sendAlert() {
-            
+            didSendAlert = true
         }
     }
 }

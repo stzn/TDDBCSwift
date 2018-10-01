@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias ResponseHandler = (Data?, URLResponse?, Error?) -> Void
+
 struct RemoteStockFetcher: RemoteStockFechable {
 
     let urlSession: SessionProtocol

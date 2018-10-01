@@ -8,10 +8,12 @@
 
 import Foundation
 
-typealias ResponseHandler = (Data?, URLResponse?, Error?) -> Void
-
 protocol RemoteStockFechable {
     func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void)
+}
+
+protocol RemoteAlertSendable {
+    func sendAlert()
 }
 
 protocol RemoteStockManageable {
@@ -26,6 +28,7 @@ struct Stock: Decodable {
 struct RemoteStockManager: RemoteStockManageable {
 
     let fetcher: RemoteStockFechable
+    let sender: RemoteAlertSendable
     
     func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void) {
         
@@ -46,5 +49,6 @@ struct RemoteStockManager: RemoteStockManageable {
     }
     
     func sendAlert() {
+        sender.sendAlert()
     }
 }
