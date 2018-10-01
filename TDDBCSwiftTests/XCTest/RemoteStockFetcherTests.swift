@@ -20,16 +20,16 @@ class RemoteStockFetcherTests: XCTestCase {
     }
     
     // TODO
-    // xリモートと正しく通信ができる
-    //   xコーラの在庫数を正しいURLで通信した場合、正常なレスポンスを返す
-    //   xコーヒーの在庫数を正しいURLで通信した場合、正常なレスポンスを返す
+    // xリモートと正しく通信して在庫数を取得する
+    //   xコーラの在庫数を取得する正しいURLで通信した場合、正常なレスポンスを返す
+    //   xコーヒーの在庫数を取得する正しいURLで通信した場合、正常なレスポンスを返す
     //   xサーバーからエラーが返ってきた場合、エラーレスポンスを返す
     //   xサーバーからレスポンスのステータスコードが399の場合、正常なレスポンスを返す
     //   xサーバーからレスポンスのステータスコードが199の場合、エラーレスポンスを返す
     //   xサーバーからレスポンスのステータスコードが400の場合、エラーレスポンスを返す
-    //   サーバーからエラではないがデータが返ってこなかった場合、エラーレスポンスを返す
+    //   xサーバーからエラーではないがデータが返ってこなかった場合、エラーレスポンスを返す
 
-    func test_サーバーからエラではないがデータが返ってこなかった場合_エラーレスポンスを返す() {
+    func test_サーバーからエラーではないがデータが返ってこなかった場合_エラーレスポンスを返す() {
         
         let url = URL(string: "https://vending.com/stock?name=cola")!
         let httpReponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
@@ -102,13 +102,13 @@ class RemoteStockFetcherTests: XCTestCase {
         }
     }
     
-    func test_コーヒーの在庫数を正しいURLで通信した場合_正常なレスポンスを返す() {
+    func test_コーヒーの在庫数を取得する正しいURLで通信した場合_正常なレスポンスを返す() {
         
         let url = URL(string: "https://vending.com/stock?name=coffee")!
         let httpReponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
         let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: nil)
         
-        let exp = expectation(description: "コーヒーの在庫数を正しいURLで通信した場合、正常なレスポンスを返す")
+        let exp = expectation(description: "コーヒーの在庫数を取得する正しいURLで通信した場合、正常なレスポンスを返す")
         
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
         var returnedData: Data?
@@ -122,13 +122,13 @@ class RemoteStockFetcherTests: XCTestCase {
         }
     }
 
-    func test_コーラの在庫数を正しいURLで通信した場合_正常なレスポンスを返す() {
+    func test_コーラの在庫数を取得する正しいURLで通信した場合_正常なレスポンスを返す() {
 
         let url = URL(string: "https://vending.com/stock?name=cola")!
         let httpReponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
         let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: nil)
         
-        let exp = expectation(description: "コーラの在庫数を正しいURLで通信した場合_正常なレスポンスを返す")
+        let exp = expectation(description: "コーラの在庫数を取得する正しいURLで通信した場合_正常なレスポンスを返す")
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
         var returnedData: Data?
         fetcher.getStock(of: .cola) { data, error in
