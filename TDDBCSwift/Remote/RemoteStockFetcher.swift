@@ -10,7 +10,7 @@ import Foundation
 
 protocol RemoteStockFechable {
     func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void)
-    func getStocks(completion: @escaping (Data?, Error?) -> Void)
+    func getAllStock(completion: @escaping (Data?, Error?) -> Void)
 }
 
 struct RemoteStockFetcher: RemoteStockFechable {
@@ -34,7 +34,7 @@ struct RemoteStockFetcher: RemoteStockFechable {
             }.resume()
     }
     
-    func getStocks(completion: @escaping (Data?, Error?) -> Void) {
+    func getAllStock(completion: @escaping (Data?, Error?) -> Void) {
         
         guard let url = URL(string: "https://vending.com/stocks") else {
             completion(nil, RemoteError.invlidURLError)

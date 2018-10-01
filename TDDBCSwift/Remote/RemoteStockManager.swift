@@ -20,25 +20,39 @@ struct RemoteStockManager: RemoteStockManageable {
     let sender: RemoteAlertSendable
     
     func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void) {
-        
         fetcher.getStock(of: beverage) { data, error in
-            guard error == nil,
-                let data = data
-                else {
+            
+            guard let stock = self.handleResponse(
+                type: Stock.self, data: data, error: error) else {
                     completion(nil)
                     return
-            }
-            
-            guard let stock = try? JSONDecoder().decode(Stock.self, from: data) else {
-                completion(nil)
-                return
             }
             completion(stock)
         }
     }
     
     func getAllStocks(completion: @escaping ([Stock]) -> Void) {
-        completion([])
+        fetcher.getAllStock { data, error in
+            
+            guard let stocks = self.handleResponse(
+                type: [Stock].self, data: data, error: error) else {
+                    completion([])
+                    return
+            }
+            completion(stocks)
+        }
+    }
+    
+    private func handleResponse<T: Decodable>(type: T.Type, data: Data?, error: Error?) -> T? {
+        
+        guard error == nil, let data = data else {
+            return nil
+        }
+        
+        guard let item = try? JSONDecoder().decode(T.self, from: data) else {
+            return nil
+        }
+        return item
     }
     
     func sendAlert(of beverage: Beverage, completion: @escaping (Bool) -> Void) {

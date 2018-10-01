@@ -37,7 +37,14 @@ class RemoteStockManagerTests: XCTestCase {
     //   xリモートに問い合わせをするがサーバーがHTTPレスポンスのエラーコードを返した場合、在庫数は取得できない
     // x在庫数が2つ以下になった時にリモートにアラートを通知する
     //   xアラートをリモートに送るメソッドを呼ぶと、リモートへの通信が開始される
+    // x全ての在庫数を取得するメソッドを呼ぶと、リモートへの通信が開始される
 
+    func test_全ての在庫数を取得するメソッドを呼ぶと_全ての飲み物の在庫数が取得できる() {
+        remoteStockManager.getAllStocks { stocks in
+            XCTAssertFalse(stocks.isEmpty)
+        }
+    }
+    
     func test_アラートをリモートに送るメソッドを呼ぶと_リモートへの通信が開始される() {
         remoteStockManager.sendAlert(of: .cola) { result in
             XCTAssertTrue(result)
@@ -106,8 +113,17 @@ class RemoteStockManagerTests: XCTestCase {
             completion(data, nil)
         }
         
-        func getStocks(completion: @escaping (Data?, Error?) -> Void) {
-            completion(nil, nil)
+        func getAllStock(completion: @escaping (Data?, Error?) -> Void) {
+            let jsonString = """
+            [
+                {\"name\": \"cola\", \"count\": 10},
+                {\"name\": \"oolongTea\",\"count\": 15},
+                {\"name\": \"redBull\",\"count\": 25},
+                {\"name\": \"beer\",\"count\": 30}
+            ]
+            """
+            let data = jsonString.data(using: .utf8)
+            completion(data, nil)
         }
     }
     

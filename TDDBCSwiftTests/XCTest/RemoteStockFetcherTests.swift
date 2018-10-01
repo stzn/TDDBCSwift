@@ -37,7 +37,7 @@ class RemoteStockFetcherTests: XCTestCase {
         let exp = expectation(description: "リモートと正しく通信して全ての在庫数を取得する")
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
         var returnedData: Data?
-        fetcher.getStocks() { data, error in
+        fetcher.getAllStock() { data, error in
             returnedData = data
             exp.fulfill()
         }
