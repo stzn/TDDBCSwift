@@ -29,6 +29,7 @@
 		D653403F2161CF7700B370DD /* PurchaseResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653403E2161CF7700B370DD /* PurchaseResult.swift */; };
 		D65340432161ECC000B370DD /* Stock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340422161ECC000B370DD /* Stock.swift */; };
 		D65340452161ED5A00B370DD /* RemoteAlertSenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */; };
+		D65340472161F78B00B370DD /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340462161F78B00B370DD /* MockURLSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		D653403E2161CF7700B370DD /* PurchaseResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseResult.swift; sourceTree = "<group>"; };
 		D65340422161ECC000B370DD /* Stock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stock.swift; sourceTree = "<group>"; };
 		D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAlertSenderTests.swift; sourceTree = "<group>"; };
+		D65340462161F78B00B370DD /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +161,7 @@
 				D653403021616CBC00B370DD /* RemoteStockManagerTests.swift */,
 				D653403421616F0B00B370DD /* RemoteStockFetcherTests.swift */,
 				D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */,
+				D65340462161F78B00B370DD /* MockURLSession.swift */,
 			);
 			path = XCTest;
 			sourceTree = "<group>";
@@ -340,6 +343,7 @@
 				D65340452161ED5A00B370DD /* RemoteAlertSenderTests.swift in Sources */,
 				D653403121616CBC00B370DD /* RemoteStockManagerTests.swift in Sources */,
 				D653403521616F0B00B370DD /* RemoteStockFetcherTests.swift in Sources */,
+				D65340472161F78B00B370DD /* MockURLSession.swift in Sources */,
 				62D11DA01F7F56EC00739528 /* ExampleXCTestTests.swift in Sources */,
 				D60AC512215F36FD0000162A /* VendingMachineTests.swift in Sources */,
 			);
