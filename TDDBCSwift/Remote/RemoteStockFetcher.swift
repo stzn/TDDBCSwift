@@ -14,38 +14,61 @@ protocol RemoteStockFechable {
 }
 
 struct RemoteStockFetcher: RemoteStockFechable {
-
+    
     let urlSession: SessionProtocol
     
     func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
-
+        
         guard let url = URL(string: "https://vending.com/stock?name=\(beverage.rawValue)") else {
             completion(nil, RemoteError.invlidURLError)
             return
         }
         
         urlSession.dataTask(with: url) { data, response, error in
-            if error != nil {
-                completion(nil, RemoteError.clientError(error!))
-                return
-            }
             
-            guard let response = response as? HTTPURLResponse,
-                200..<400 ~= response.statusCode else {
-                    completion(nil, RemoteError.serverError)
-                    return
-            }
+            let result = self.handleResponse(
+                data: data, response: response, error: error
+            )
+            completion(result.data, result.error)
             
-            guard let data = data else {
-                completion(nil, RemoteError.dataNilError)
-                return
-            }
-            completion(data, nil)
-        }.resume()
+            }.resume()
     }
     
     func getStocks(completion: @escaping (Data?, Error?) -> Void) {
-        completion(nil, nil)
+        
+        guard let url = URL(string: "https://vending.com/stocks") else {
+            completion(nil, RemoteError.invlidURLError)
+            return
+        }
+        
+        urlSession.dataTask(with: url) { data, response, error in
+            
+            let result = self.handleResponse(
+                data: data, response: response, error: error
+            )
+            completion(result.data, result.error)
+            
+            }.resume()
+    }
+    
+    private func handleResponse(
+        data: Data?,
+        response: URLResponse?,
+        error: Error?) -> (data: Data?, error: Error?){
+        
+        if error != nil {
+            return (nil, RemoteError.clientError(error!))
+        }
+        
+        guard let response = response as? HTTPURLResponse,
+            200..<400 ~= response.statusCode else {
+                return (nil, RemoteError.serverError)
+        }
+        
+        guard let data = data else {
+            return (nil, RemoteError.dataNilError)
+        }
+        return (data, nil)
     }
 }
 
@@ -60,3 +83,5 @@ protocol SessionProtocol {
 }
 
 extension URLSession: SessionProtocol {}
+
+
