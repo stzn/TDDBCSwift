@@ -30,6 +30,7 @@
 		D65340432161ECC000B370DD /* Stock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340422161ECC000B370DD /* Stock.swift */; };
 		D65340452161ED5A00B370DD /* RemoteAlertSenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */; };
 		D65340472161F78B00B370DD /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340462161F78B00B370DD /* MockURLSession.swift */; };
+		D65340492161F94C00B370DD /* RemoteAlertSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340482161F94C00B370DD /* RemoteAlertSender.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		D65340422161ECC000B370DD /* Stock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stock.swift; sourceTree = "<group>"; };
 		D65340442161ED5A00B370DD /* RemoteAlertSenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAlertSenderTests.swift; sourceTree = "<group>"; };
 		D65340462161F78B00B370DD /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
+		D65340482161F94C00B370DD /* RemoteAlertSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAlertSender.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +195,7 @@
 			children = (
 				D653403221616E6800B370DD /* RemoteStockManager.swift */,
 				D65340362161711C00B370DD /* RemoteStockFetcher.swift */,
+				D65340482161F94C00B370DD /* RemoteAlertSender.swift */,
 			);
 			path = Remote;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				2475E28BE43743071E748308 /* Sample.swift in Sources */,
 				D65340432161ECC000B370DD /* Stock.swift in Sources */,
 				D60AC514215F38B50000162A /* VendingMachine.swift in Sources */,
+				D65340492161F94C00B370DD /* RemoteAlertSender.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
