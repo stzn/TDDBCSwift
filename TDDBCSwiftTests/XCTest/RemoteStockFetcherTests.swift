@@ -34,7 +34,7 @@ class RemoteStockFetcherTests: XCTestCase {
         let httpReponse = HTTPURLResponse(url: url, statusCode: 399, httpVersion: nil, headerFields: nil)
         let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: nil)
         
-        let exp = expectation(description: "サーバーからエラーが返ってきた場合、エラーレスポンスを返す")
+        let exp = expectation(description: "サーバーからレスポンスのステータスコードが399の場合_正常なレスポンスを返す")
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
         var returnedError: Error?
         fetcher.getStock(of: .cola) { data, error in
