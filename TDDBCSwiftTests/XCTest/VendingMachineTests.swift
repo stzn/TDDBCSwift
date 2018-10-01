@@ -88,6 +88,16 @@ class VendingMachineTests: XCTestCase {
 
 
     func test_初期化時に_リモートに在庫数を取得するメソッドを呼び_全ての飲み物の在庫数を取得する() {
+
+        manager.setStock(beverage: .cola, count: 10)
+        manager.setStock(beverage: .oolongTea, count: 15)
+        manager.setStock(beverage: .coffee, count: 20)
+        manager.setStock(beverage: .redBull, count: 25)
+        manager.setStock(beverage: .beer, count: 30)
+
+        vendingMachine = VendingMachine(manager: manager, defaultStocks: 4)
+        
+        XCTAssertTrue(manager.getAllStocksCalled)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 10)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .oolongTea), 15)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .coffee), 20)
@@ -105,6 +115,7 @@ class VendingMachineTests: XCTestCase {
     }
 
     func test_コーラを購入し_コーラの在庫が2つより多い場合_リモートにアラートを送るメソッドは呼ばれない() {
+        manager.setStock(beverage: .cola, count: 4)
         vendingMachine = VendingMachine(manager: manager, defaultStocks: 4)
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
@@ -121,6 +132,7 @@ class VendingMachineTests: XCTestCase {
     }
 
     func test_コーラを購入し_コーラの在庫が1つになった場合_リモートにアラートを送るメソッドは呼ばれる() {
+        manager.setStock(beverage: .cola, count: 2)
         vendingMachine = VendingMachine(manager: manager, defaultStocks: 2)
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
@@ -129,6 +141,7 @@ class VendingMachineTests: XCTestCase {
     }
 
     func test_コーヒーを購入し_コーヒーの在庫が2つになった場合_リモートにアラートを送るメソッドが呼ばれる() {
+        manager.setStock(beverage: .coffee, count: 3)
         vendingMachine = VendingMachine(manager: manager, defaultStocks: 3)
         insertMutipleCoins(money: .fiveHundred, times: 1)
         _ = vendingMachine.dispence(beverage: .coffee)
@@ -137,6 +150,7 @@ class VendingMachineTests: XCTestCase {
     }
 
     func test_コーラを購入し_コーラの在庫が2つになった場合_リモートにアラートを送るメソッドが呼ばれる() {
+        manager.setStock(beverage: .cola, count: 3)
         vendingMachine = VendingMachine(manager: manager, defaultStocks: 3)
         insertMutipleCoins(money: .hundred, times: 1)
         _ = vendingMachine.dispence(beverage: .cola)
@@ -146,6 +160,7 @@ class VendingMachineTests: XCTestCase {
     
     func test_コーラの在庫が上限の状態で在庫を1つ補充しても在庫数は変わらない() {
         let colaMaxStockCount = Beverage.cola.maxStockCount
+        manager.setStock(beverage: .cola, count: colaMaxStockCount)
         vendingMachine = VendingMachine(manager: manager, defaultStocks: colaMaxStockCount)
         vendingMachine.supply(.cola, count: 1)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), colaMaxStockCount)
@@ -174,6 +189,7 @@ class VendingMachineTests: XCTestCase {
     }
     
     func test_コーラの在庫が2の状態でコーラを買いさらにもう一度コーラを買うことができる() {
+        manager.setStock(beverage: .cola, count: 2)
         vendingMachine = VendingMachine(manager: manager, defaultStocks: 2)
         XCTAssertEqual(vendingMachine.numberOfStocks(of: .cola), 2)
         insertMutipleCoins(money: .fiveHundred, times: 1)
@@ -391,9 +407,19 @@ class VendingMachineTests: XCTestCase {
     }
     
     class MockRemoteStockManager: RemoteStockManageable {
+
         var sendAlertCalled = false
         var getStockCalled = false
+        var getAllStocksCalled = false
 
+        var stocks: [Stock] = [
+            Stock(beverage: .cola, count: 1),
+            Stock(beverage: .oolongTea, count: 1),
+            Stock(beverage: .coffee, count: 1),
+            Stock(beverage: .redBull, count: 1),
+            Stock(beverage: .beer, count: 1)
+        ]
+        
         func sendAlert(completion: @escaping (Bool) -> Void) {
             sendAlertCalled = true
             completion(true)
@@ -403,8 +429,17 @@ class VendingMachineTests: XCTestCase {
             getStockCalled = true
         }
 
+        func setStock(beverage: Beverage, count: Int) {
+            
+            guard let first = stocks.first(where: { $0.beverage == beverage }) else {
+                fatalError()
+            }
+            first.count = count
+        }
+        
         func getAllStocks(completion: @escaping ([Stock]) -> Void) {
-            completion([])
+            getAllStocksCalled = true
+            completion(stocks)
         }
     }
     

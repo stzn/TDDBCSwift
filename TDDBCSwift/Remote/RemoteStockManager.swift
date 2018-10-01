@@ -18,8 +18,19 @@ protocol RemoteStockManageable {
     func getAllStocks(completion: @escaping ([Stock]) -> Void)
 }
 
-struct Stock: Decodable {
-    let count: Int
+final class Stock: Decodable {
+    let beverage: Beverage
+    var count: Int
+    
+    init(beverage: Beverage, count: Int) {
+        self.beverage = beverage
+        self.count = count
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case beverage = "name"
+        case count
+    }
 }
 
 struct RemoteStockManager: RemoteStockManageable {

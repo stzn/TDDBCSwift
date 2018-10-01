@@ -92,15 +92,15 @@ class RemoteStockManagerTests: XCTestCase {
             let jsonString: String
             switch beverage {
             case .cola:
-                jsonString = "{\"count\": 10}"
+                jsonString = "{\"name\": \"cola\", \"count\": 10}"
             case .oolongTea:
-                jsonString = "{\"count\": 15}"
+                jsonString = "{\"name\": \"oolongTea\",\"count\": 15}"
             case .coffee:
-                jsonString = "{\"count\": 20}"
+                jsonString = "{\"name\": \"coffee\",\"count\": 20}"
             case .redBull:
-                jsonString = "{\"count\": 25}"
+                jsonString = "{\"name\": \"redBull\",\"count\": 25}"
             case .beer:
-                jsonString = "{\"count\": 30}"
+                jsonString = "{\"name\": \"beer\",\"count\": 30}"
             }
             let data = jsonString.data(using: .utf8)            
             completion(data, nil)

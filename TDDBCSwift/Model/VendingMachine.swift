@@ -20,10 +20,11 @@ final class VendingMachine {
         self.manager = manager
         
         manager.getAllStocks { stocks in
-        }
-        
-        Beverage.allCases.forEach {
-            stocks[$0] = defaultStocks
+            self.stocks = stocks.reduce([Beverage:Int]()) { (result, stock) -> [Beverage: Int] in
+                var result = result
+                result[stock.beverage] = stock.count
+                return result
+            }
         }
     }
     

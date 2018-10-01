@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Beverage: String, CaseIterable, Hashable {
+enum Beverage: String, CaseIterable, Hashable, Decodable {
     case cola
     case oolongTea
     case coffee
