@@ -10,18 +10,18 @@ import XCTest
 @testable import TDDBCSwift
 
 class RemoteStockManagerTests: XCTestCase {
-
+    
     var remoteStockManager: RemoteStockManager!
     var fetcher: MockRemoteStockFetcher!
     var sender: MockRemoteAlertSender!
-
+    
     override func setUp() {
         super.setUp()
         fetcher = MockRemoteStockFetcher()
         sender = MockRemoteAlertSender()
         remoteStockManager = RemoteStockManager(fetcher: fetcher, sender: sender)
     }
-
+    
     override func tearDown() {
         remoteStockManager = nil
         fetcher = nil
@@ -38,9 +38,14 @@ class RemoteStockManagerTests: XCTestCase {
     // x在庫数が2つ以下になった時にリモートにアラートを通知する
     //   xアラートをリモートに送るメソッドを呼ぶと、リモートへの通信が開始される
     // x全ての在庫数を取得するメソッドを呼ぶと、リモートへの通信が開始される
-
+    
     func test_全ての在庫数を取得するメソッドを呼ぶと_全ての飲み物の在庫数が取得できる() {
-        remoteStockManager.getAllStocks { stocks in
+        remoteStockManager.getAllStocks { result in
+            
+            guard let stocks = result.value else {
+                XCTFail()
+                return
+            }
             XCTAssertFalse(stocks.isEmpty)
         }
     }
@@ -55,8 +60,9 @@ class RemoteStockManagerTests: XCTestCase {
         
         remoteStockManager = RemoteStockManager(fetcher: MockRemoteHttpResponseErrorFetcher(), sender: sender)
         
-        remoteStockManager.getStock(of: .cola) { stock in
-            XCTAssertNil(stock)
+        remoteStockManager.getStock(of: .cola) { result in
+            XCTAssertNil(result.value)
+            XCTAssertTrue(result.error is RemoteError)
         }
     }
     
@@ -64,8 +70,9 @@ class RemoteStockManagerTests: XCTestCase {
         
         remoteStockManager = RemoteStockManager(fetcher: MockRemoteErrorFetcher(), sender: sender)
         
-        remoteStockManager.getStock(of: .cola) { stock in
-            XCTAssertNil(stock)
+        remoteStockManager.getStock(of: .cola) { result in
+            XCTAssertNil(result.value)
+            XCTAssertTrue(result.error is RemoteError)
         }
     }
     
@@ -73,7 +80,7 @@ class RemoteStockManagerTests: XCTestCase {
         
         remoteStockManager.getStock(of: .coffee) { stock in
             
-            guard let stock = stock else {
+            guard let stock = stock.value else {
                 XCTFail()
                 return
             }
@@ -84,7 +91,7 @@ class RemoteStockManagerTests: XCTestCase {
     func test_コーラの在庫数をリモート監視に問い合わせると_コーラの在庫数が取得できる() {
         
         remoteStockManager.getStock(of: .cola) { stock in
-            guard let stock = stock else {
+            guard let stock = stock.value else {
                 XCTFail()
                 return
             }
@@ -94,7 +101,7 @@ class RemoteStockManagerTests: XCTestCase {
     
     class MockRemoteStockFetcher: RemoteStockFechable {
         
-        func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
+        func getStock(of beverage: Beverage, completion: @escaping (Result<Stock, Error>) -> Void) {
             
             let jsonString: String
             switch beverage {
@@ -109,11 +116,12 @@ class RemoteStockManagerTests: XCTestCase {
             case .beer:
                 jsonString = "{\"name\": \"beer\",\"count\": 30}"
             }
-            let data = jsonString.data(using: .utf8)            
-            completion(data, nil)
+            let data = jsonString.data(using: .utf8)!
+            let stock = try! JSONDecoder().decode(Stock.self, from: data)
+            completion(.success(stock))
         }
         
-        func getAllStock(completion: @escaping (Data?, Error?) -> Void) {
+        func getAllStock(completion: @escaping (Result<[Stock], Error>) -> Void) {
             let jsonString = """
             [
                 {\"name\": \"cola\", \"count\": 10},
@@ -122,22 +130,22 @@ class RemoteStockManagerTests: XCTestCase {
                 {\"name\": \"beer\",\"count\": 30}
             ]
             """
-            let data = jsonString.data(using: .utf8)
-            completion(data, nil)
+            let data = jsonString.data(using: .utf8)!
+            let stocks = try! JSONDecoder().decode([Stock].self, from: data)
+            completion(.success(stocks))
         }
     }
     
     class MockRemoteErrorFetcher: MockRemoteStockFetcher {
-        override func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
+        override func getStock(of beverage: Beverage, completion: @escaping (Result<Stock, Error>) -> Void) {
             let error = NSError(domain: "error", code: 999, userInfo: nil)
-            completion(nil, RemoteError.clientError(error))
+            completion(.failure(RemoteError.clientError(error)))
         }
     }
     
     class MockRemoteHttpResponseErrorFetcher: MockRemoteStockFetcher {
-        override func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
-            let data = "{\"count\": 30}".data(using: .utf8)
-            completion(data, RemoteError.serverError)
+        override func getStock(of beverage: Beverage, completion: @escaping (Result<Stock, Error>) -> Void) {
+            completion(.failure(RemoteError.serverError))
         }
     }
     

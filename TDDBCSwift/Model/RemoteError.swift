@@ -14,4 +14,5 @@ enum RemoteError: Error {
     case serverError
     case invlidURLError
     case dataNilError
+    case JSONDecodeError
 }

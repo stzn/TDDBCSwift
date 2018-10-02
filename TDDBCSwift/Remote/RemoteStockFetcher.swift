@@ -9,66 +9,72 @@
 import Foundation
 
 protocol RemoteStockFechable {
-    func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void)
-    func getAllStock(completion: @escaping (Data?, Error?) -> Void)
+    func getStock(of beverage: Beverage, completion: @escaping (Result<Stock, Error>) -> Void)
+    func getAllStock(completion: @escaping (Result<[Stock], Error>) -> Void)
 }
 
 struct RemoteStockFetcher: RemoteStockFechable {
-    
+
     let urlSession: SessionProtocol
     
-    func getStock(of beverage: Beverage, completion: @escaping (Data?, Error?) -> Void) {
+    func getStock(of beverage: Beverage, completion: @escaping (Result<Stock, Error>) -> Void) {
         
         guard let url = URL(string: "https://vending.com/stock?name=\(beverage.rawValue)") else {
-            completion(nil, RemoteError.invlidURLError)
+            completion(.failure(RemoteError.invlidURLError))
             return
         }
         
         urlSession.dataTask(with: url) { data, response, error in
             
             let result = self.handleResponse(
-                data: data, response: response, error: error
+                type: Stock.self, data: data,
+                response: response, error: error
             )
-            completion(result.data, result.error)
+            completion(result)
             
             }.resume()
     }
     
-    func getAllStock(completion: @escaping (Data?, Error?) -> Void) {
+    func getAllStock(completion: @escaping (Result<[Stock], Error>) -> Void) {
         
         guard let url = URL(string: "https://vending.com/stocks") else {
-            completion(nil, RemoteError.invlidURLError)
+            completion(.failure(RemoteError.invlidURLError))
             return
         }
         
         urlSession.dataTask(with: url) { data, response, error in
             
             let result = self.handleResponse(
-                data: data, response: response, error: error
+                type: [Stock].self, data: data,
+                response: response, error: error
             )
-            completion(result.data, result.error)
+            completion(result)
             
             }.resume()
     }
     
-    private func handleResponse(
-        data: Data?,
+    private func handleResponse<T: Decodable>(
+        type: T.Type, data: Data?,
         response: URLResponse?,
-        error: Error?) -> (data: Data?, error: Error?){
-        
+        error: Error?) -> Result<T, Error> {
+
         if error != nil {
-            return (nil, RemoteError.clientError(error!))
+            return .failure(RemoteError.clientError(error!))
         }
         
         guard let response = response as? HTTPURLResponse,
             200..<400 ~= response.statusCode else {
-                return (nil, RemoteError.serverError)
+                return .failure(RemoteError.serverError)
         }
         
         guard let data = data else {
-            return (nil, RemoteError.dataNilError)
+            return .failure(RemoteError.dataNilError)
         }
-        return (data, nil)
+
+        guard let item = try? JSONDecoder().decode(T.self, from: data) else {
+            return .failure(RemoteError.JSONDecodeError)
+        }
+        return .success(item)
     }
 }
 

@@ -19,11 +19,12 @@ final class VendingMachine {
     init(manager: RemoteStockManageable) {
         self.manager = manager
         
-        manager.getAllStocks { [unowned self] stocks in
+        manager.getAllStocks { [unowned self] result in
 
-            guard !stocks.isEmpty else {
-                self.isBroken = true
-                return
+            guard let stocks = result.value,
+                !stocks.isEmpty else {
+                    self.isBroken = true
+                    return
             }
             
             self.stocks = stocks.reduce([Beverage:Int]()) { (result, stock) -> [Beverage: Int] in

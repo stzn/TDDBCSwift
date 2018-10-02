@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Stock: Decodable {
+final class Stock: Codable {
     let beverage: Beverage
     var count: Int
     

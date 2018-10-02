@@ -438,7 +438,7 @@ class VendingMachineTests: XCTestCase {
             completion(.success(true))
         }
 
-        func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void) {
+        func getStock(of beverage: Beverage, completion: @escaping (Result<Stock, Error>) -> Void) {
             getStockCalled = true
         }
 
@@ -450,9 +450,9 @@ class VendingMachineTests: XCTestCase {
             first.count = count
         }
         
-        func getAllStocks(completion: @escaping ([Stock]) -> Void) {
+        func getAllStocks(completion: @escaping (Result<[Stock], Error>) -> Void) {
             getAllStocksCalled = true
-            completion(stocks)
+            completion(.success(stocks))
         }
     }
     
@@ -464,9 +464,9 @@ class VendingMachineTests: XCTestCase {
     }
     
     class MockRemoteGetAllStocksFailureStockManager: MockRemoteStockManager {
-        override func getAllStocks(completion: @escaping ([Stock]) -> Void) {
+        override func getAllStocks(completion: @escaping (Result<[Stock], Error>) -> Void) {
             getAllStocksCalled = true
-            completion([])
+            completion(.failure(RemoteError.serverError))
         }
     }
 }

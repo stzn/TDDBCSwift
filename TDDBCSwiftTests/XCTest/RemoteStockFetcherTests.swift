@@ -33,17 +33,26 @@ class RemoteStockFetcherTests: XCTestCase {
     func test_リモートと正しく通信して全ての在庫数を取得する() {
         
         let url = URL(string: "https://vending.com/stocks")!
-        let urlSession = createMockURLSessionFrom(url: url, statusCode: 200)
+        
+        let stocks = [
+            Stock(beverage: .cola, count: 10),
+            Stock(beverage: .oolongTea, count: 15),
+            Stock(beverage: .coffee, count: 20),
+            Stock(beverage: .redBull, count: 25),
+            Stock(beverage: .beer, count: 30)
+        ]
+        let urlSession = createMockURLSessionFrom(item: stocks, url: url, statusCode: 200)
         let exp = expectation(description: "リモートと正しく通信して全ての在庫数を取得する")
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
-        var returnedData: Data?
-        fetcher.getAllStock() { data, error in
-            returnedData = data
+        var returnedResult: Result<[Stock], Error>? = nil
+        fetcher.getAllStock() { result in
+            returnedResult = result
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
             XCTAssertEqual(urlSession.url, url)
-            XCTAssertNotNil(returnedData)
+            XCTAssertFalse(returnedResult?.value?.isEmpty ?? false)
+            XCTAssertNil(returnedResult?.error)
         }
     }
     
@@ -56,8 +65,8 @@ class RemoteStockFetcherTests: XCTestCase {
         let exp = expectation(description: "サーバーからエラではないがデータが返ってこなかった場合、エラーレスポンスを返す")
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
         var returnedError: Error?
-        fetcher.getStock(of: .cola) { data, error in
-            returnedError = error
+        fetcher.getStock(of: .cola) { result in
+            returnedError = result.error
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
@@ -69,13 +78,13 @@ class RemoteStockFetcherTests: XCTestCase {
     func test_サーバーからレスポンスのステータスコードが199の場合_エラーレスポンスを返す() {
         
         let url = URL(string: "https://vending.com/stock?name=cola")!
-        let urlSession = createMockURLSessionFrom(url: url, statusCode: 199)
+        let urlSession = createMockURLSessionFrom(item: Optional<Stock>.none, url: url, statusCode: 199)
         
         let exp = expectation(description: "サーバーからレスポンスのステータスコードが199の場合、エラーレスポンスを返す")
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
         var returnedError: Error?
-        fetcher.getStock(of: .cola) { data, error in
-            returnedError = error
+        fetcher.getStock(of: .cola) { result in
+            returnedError = result.error
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
@@ -86,17 +95,17 @@ class RemoteStockFetcherTests: XCTestCase {
     func test_サーバーからレスポンスのステータスコードが399の場合_エラーレスポンスを返す() {
         
         let url = URL(string: "https://vending.com/stock?name=cola")!
-        let urlSession = createMockURLSessionFrom(url: url, statusCode: 399)
+        let urlSession = createMockURLSessionFrom(item: Optional<Stock>.none, url: url, statusCode: 399)
 
         let exp = expectation(description: "サーバーからレスポンスのステータスコードが399の場合、エラーレスポンスを返す")
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
         var returnedError: Error?
-        fetcher.getStock(of: .cola) { data, error in
-            returnedError = error
+        fetcher.getStock(of: .cola) { result in
+            returnedError = result.error
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
-            XCTAssertNil(returnedError)
+            XCTAssertTrue(returnedError is RemoteError)
         }
     }
 
@@ -109,8 +118,8 @@ class RemoteStockFetcherTests: XCTestCase {
         let exp = expectation(description: "サーバーからエラーが返ってきた場合、エラーレスポンスを返す")
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
         var returnedError: Error?
-        fetcher.getStock(of: .cola) { data, error in
-            returnedError = error
+        fetcher.getStock(of: .cola) { result in
+            returnedError = result.error
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
@@ -121,14 +130,14 @@ class RemoteStockFetcherTests: XCTestCase {
     func test_コーヒーの在庫数を取得する正しいURLで通信した場合_正常なレスポンスを返す() {
         
         let url = URL(string: "https://vending.com/stock?name=coffee")!
-        let urlSession = createMockURLSessionFrom(url: url, statusCode: 200)
+        let urlSession = createMockURLSessionFrom(item: Stock(beverage: .coffee, count: 10), url: url, statusCode: 200)
         
         let exp = expectation(description: "コーヒーの在庫数を取得する正しいURLで通信した場合、正常なレスポンスを返す")
         
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
-        var returnedData: Data?
-        fetcher.getStock(of: .coffee) { data, error in
-            returnedData = data
+        var returnedData: Stock?
+        fetcher.getStock(of: .coffee) { result in
+            returnedData = result.value
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
@@ -140,13 +149,13 @@ class RemoteStockFetcherTests: XCTestCase {
     func test_コーラの在庫数を取得する正しいURLで通信した場合_正常なレスポンスを返す() {
 
         let url = URL(string: "https://vending.com/stock?name=cola")!
-        let urlSession = createMockURLSessionFrom(url: url, statusCode: 200)
+        let urlSession = createMockURLSessionFrom(item: Stock(beverage: .cola, count: 3), url: url, statusCode: 200)
         
         let exp = expectation(description: "コーラの在庫数を取得する正しいURLで通信した場合_正常なレスポンスを返す")
         let fetcher = RemoteStockFetcher(urlSession: urlSession)
-        var returnedData: Data?
-        fetcher.getStock(of: .cola) { data, error in
-            returnedData = data
+        var returnedData: Stock?
+        fetcher.getStock(of: .cola) { result in
+            returnedData = result.value
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
@@ -155,9 +164,14 @@ class RemoteStockFetcherTests: XCTestCase {
         }
     }
     
-    private func createMockURLSessionFrom(url: URL, statusCode: Int) -> MockURLSession {
+    private func createMockURLSessionFrom<T: Encodable>(item: T?, url: URL, statusCode: Int) -> MockURLSession {
         let httpReponse = HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: nil)
-        return MockURLSession(data: Data(), urlResponse: httpReponse, error: nil)
+        
+        var data = Data()
+        if let stock = item {
+            data = try! JSONEncoder().encode(stock)
+        }
+        return MockURLSession(data: data, urlResponse: httpReponse, error: nil)
     }
 
 }
