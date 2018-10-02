@@ -433,9 +433,9 @@ class VendingMachineTests: XCTestCase {
             Stock(beverage: .beer, count: 1)
         ]
         
-        func sendAlert(of beverage: Beverage, completion: @escaping (Bool) -> Void) {
+        func sendAlert(of beverage: Beverage, completion: @escaping (Result<Bool, Error>) -> Void) {
             sendAlertCalled = true
-            completion(true)
+            completion(.success(true))
         }
 
         func getStock(of beverage: Beverage, completion: @escaping (Stock?) -> Void) {
@@ -457,9 +457,9 @@ class VendingMachineTests: XCTestCase {
     }
     
     class MockRemoteAlertSendFailureStockManager: MockRemoteStockManager {
-        override func sendAlert(of beverage: Beverage, completion: @escaping (Bool) -> Void) {
+        override func sendAlert(of beverage: Beverage, completion: @escaping (Result<Bool, Error>) -> Void) {
             sendAlertCalled = true
-            completion(false)
+            completion(.failure(RemoteError.serverError))
         }
     }
     

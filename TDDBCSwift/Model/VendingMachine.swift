@@ -53,6 +53,11 @@ final class VendingMachine {
     func sendAlertIfNeeded(of beverage: Beverage) {
         if stocks[beverage]! <= sendAlertUpperLimit {
             manager.sendAlert(of: beverage) { [unowned self] success in
+                
+                guard let success = success.value else {
+                    self.isBroken = true
+                    return
+                }
                 self.isBroken = !success
             }
         }

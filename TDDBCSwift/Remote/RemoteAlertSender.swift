@@ -9,17 +9,17 @@
 import Foundation
 
 protocol RemoteAlertSendable {
-    func sendAlert(of beverage: Beverage, completion: @escaping (Bool) -> Void)
+    func sendAlert(of beverage: Beverage, completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
 struct RemoteAlertSender: RemoteAlertSendable {
     
     let urlSession: SessionProtocol
     
-    func sendAlert(of beverage: Beverage, completion: @escaping (Bool) -> Void) {
+    func sendAlert(of beverage: Beverage, completion: @escaping (Result<Bool, Error>) -> Void) {
 
         guard let url = URL(string: "https://vending.com/alert") else {
-            completion(false)
+            completion(.failure(RemoteError.invlidURLError))
             return
         }
 
@@ -27,7 +27,7 @@ struct RemoteAlertSender: RemoteAlertSendable {
         let param = ["name": beverage.rawValue]
         
         guard let data = try? JSONEncoder().encode(param) else {
-            completion(false)
+            completion(.failure(RemoteError.dataNilError))
             return
         }
         request.httpMethod = "POST"
@@ -36,21 +36,21 @@ struct RemoteAlertSender: RemoteAlertSendable {
         urlSession.dataTask(with: request) { data, response, error in
             
             if error != nil {
-                completion(false)
+                completion(.failure(RemoteError.clientError(error!)))
                 return
             }
             
             guard let response = response as? HTTPURLResponse,
                 200..<400 ~= response.statusCode else {
-                    completion(false)
+                    completion(.failure(RemoteError.dataNilError))
                     return
             }
             
             guard let _ = data else {
-                completion(false)
+                completion(.failure(RemoteError.dataNilError))
                 return
             }
-            completion(true)
+            completion(.success(true))
             
         }.resume()
     }

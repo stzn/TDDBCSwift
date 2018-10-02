@@ -28,13 +28,13 @@ class RemoteAlertSenderTests: XCTestCase {
     //  xサーバーからエラーが返ってきた場合、エラーレスポンスを返す
     //  xサーバーからのレスポンスのステータスコードが399の場合、正常なレスポンスを返す
     //  xサーバーからのレスポンスのステータスコードが199の場合、エラーレスポンスを返す
-    //  サーバーからのレスポンスのステータスコードが400の場合、エラーレスポンスを返す
+    //  xサーバーからのレスポンスのステータスコードが400の場合、エラーレスポンスを返す
 
     func test_サーバーからのレスポンスのステータスコードが400の場合_エラーレスポンスを返す() {
         
         let urlSession = createMockURLSessionFrom(statusCode: 400)
         let sender = RemoteAlertSender(urlSession: urlSession)
-        var success: Bool = false
+        var success: Result<Bool, Error>? = nil
         
         let exp = expectation(description: "サーバーからのレスポンスのステータスコードが400の場合、エラーレスポンスを返す")
         sender.sendAlert(of: .cola) { result in
@@ -42,7 +42,8 @@ class RemoteAlertSenderTests: XCTestCase {
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
-            XCTAssertFalse(success)
+            XCTAssertFalse(success?.value ?? false)
+            XCTAssertTrue(success?.error is RemoteError)
         }
     }
 
@@ -50,7 +51,7 @@ class RemoteAlertSenderTests: XCTestCase {
     
         let urlSession = createMockURLSessionFrom(statusCode: 199)
         let sender = RemoteAlertSender(urlSession: urlSession)
-        var success: Bool = false
+        var success: Result<Bool, Error>? = nil
     
         let exp = expectation(description: "サーバーからのレスポンスのステータスコードが199の場合、エラーレスポンスを返す")
         sender.sendAlert(of: .cola) { result in
@@ -58,7 +59,8 @@ class RemoteAlertSenderTests: XCTestCase {
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
-            XCTAssertFalse(success)
+            XCTAssertFalse(success?.value ?? false)
+            XCTAssertTrue(success?.error is RemoteError)
         }
     }
 
@@ -66,7 +68,7 @@ class RemoteAlertSenderTests: XCTestCase {
         
         let urlSession = createMockURLSessionFrom(statusCode: 399)
         let sender = RemoteAlertSender(urlSession: urlSession)
-        var success: Bool = false
+        var success: Result<Bool, Error>? = nil
         
         let exp = expectation(description: "サーバーからのレスポンスのステータスコードが399の場合、正常なレスポンスを返す")
         sender.sendAlert(of: .cola) { result in
@@ -74,7 +76,8 @@ class RemoteAlertSenderTests: XCTestCase {
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
-            XCTAssertTrue(success)
+            XCTAssertTrue(success?.value ?? false)
+            XCTAssertNil(success?.error)
         }
         
     }
@@ -84,7 +87,7 @@ class RemoteAlertSenderTests: XCTestCase {
         let httpReponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
         let urlSession = MockURLSession(data: Data(), urlResponse: httpReponse, error: RemoteError.dataNilError)
         let sender = RemoteAlertSender(urlSession: urlSession)
-        var success: Bool = false
+        var success: Result<Bool, Error>? = nil
 
         let exp = expectation(description: "サーバーからエラーが返ってきた場合_エラーレスポンスを返す")
         sender.sendAlert(of: .cola) { result in
@@ -92,7 +95,8 @@ class RemoteAlertSenderTests: XCTestCase {
             exp.fulfill()
         }
         waitForExpectations(timeout: 3) { error in
-            XCTAssertFalse(success)
+            XCTAssertFalse(success?.value ?? false)
+            XCTAssertTrue(success?.error is RemoteError)
         }
 
     }
@@ -102,7 +106,7 @@ class RemoteAlertSenderTests: XCTestCase {
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
         let urlSession = MockURLSession(data: Data(), urlResponse: response, error: nil)
         let sender = RemoteAlertSender(urlSession: urlSession)
-        var success: Bool = false
+        var success: Result<Bool, Error>? = nil
         
         let exp = expectation(description: "コーヒーの在庫数が少ないというアラートを正しいRequestでPOST通信した場合、正常なレスポンスを返す")
         sender.sendAlert(of: .coffee) { result in
@@ -117,7 +121,8 @@ class RemoteAlertSenderTests: XCTestCase {
             }
             XCTAssertEqual(beverage, .coffee)
             XCTAssertEqual(urlSession.request?.httpMethod, "POST")
-            XCTAssertTrue(success)
+            XCTAssertTrue(success?.value ?? false)
+            XCTAssertNil(success?.error)
         }
     }
     
@@ -126,7 +131,7 @@ class RemoteAlertSenderTests: XCTestCase {
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
         let urlSession = MockURLSession(data: Data(), urlResponse: response, error: nil)
         let sender = RemoteAlertSender(urlSession: urlSession)
-        var success: Bool = false
+        var success: Result<Bool, Error>? = nil
         
         let exp = expectation(description: "コーラの在庫数が少ないというアラートを正しいRequestで通信した場合_正常なレスポンスを返す")
         sender.sendAlert(of: .cola) { result in
@@ -141,7 +146,8 @@ class RemoteAlertSenderTests: XCTestCase {
             }
             XCTAssertEqual(beverage, .cola)
             XCTAssertEqual(urlSession.request?.httpMethod, "POST")
-            XCTAssertTrue(success)
+            XCTAssertTrue(success?.value ?? false)
+            XCTAssertNil(success?.error)
         }
     }
     

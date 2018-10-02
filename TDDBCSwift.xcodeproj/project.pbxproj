@@ -32,6 +32,7 @@
 		D65340472161F78B00B370DD /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340462161F78B00B370DD /* MockURLSession.swift */; };
 		D65340492161F94C00B370DD /* RemoteAlertSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65340482161F94C00B370DD /* RemoteAlertSender.swift */; };
 		D653404B21620D2F00B370DD /* SessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653404A21620D2F00B370DD /* SessionProtocol.swift */; };
+		D6D7772D2164043F00575D12 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D7772C2164043F00575D12 /* Result.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		D65340462161F78B00B370DD /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
 		D65340482161F94C00B370DD /* RemoteAlertSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAlertSender.swift; sourceTree = "<group>"; };
 		D653404A21620D2F00B370DD /* SessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionProtocol.swift; sourceTree = "<group>"; };
+		D6D7772C2164043F00575D12 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +201,7 @@
 				D65340362161711C00B370DD /* RemoteStockFetcher.swift */,
 				D65340482161F94C00B370DD /* RemoteAlertSender.swift */,
 				D653404A21620D2F00B370DD /* SessionProtocol.swift */,
+				D6D7772C2164043F00575D12 /* Result.swift */,
 			);
 			path = Remote;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				D653404B21620D2F00B370DD /* SessionProtocol.swift in Sources */,
 				D65340372161711C00B370DD /* RemoteStockFetcher.swift in Sources */,
 				62D11D8D1F7F56EC00739528 /* ViewController.swift in Sources */,
+				D6D7772D2164043F00575D12 /* Result.swift in Sources */,
 				D653403F2161CF7700B370DD /* PurchaseResult.swift in Sources */,
 				D653403B2161CF1600B370DD /* Beverage.swift in Sources */,
 				D65340392161960D00B370DD /* RemoteError.swift in Sources */,
