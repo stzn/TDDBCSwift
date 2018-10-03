@@ -21,8 +21,8 @@ enum Result<T, Error> {
     }
     
     var error: Error? {
-        if case let .failure(value) = self {
-            return value
+        if case let .failure(error) = self {
+            return error
         } else {
             return nil
         }
