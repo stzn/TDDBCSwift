@@ -12,7 +12,9 @@ protocol RemoteAlertSendable {
     func sendAlert(of beverage: Beverage, completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
-struct RemoteAlertSender: RemoteAlertSendable {
+struct RemoteAlertSender: RemoteAlertSendable, ResponseHandlable {
+
+    typealias T = Bool
     
     let urlSession: SessionProtocol
     
@@ -34,24 +36,13 @@ struct RemoteAlertSender: RemoteAlertSendable {
         request.httpBody = data
 
         urlSession.dataTask(with: request) { data, response, error in
-            
-            if error != nil {
-                completion(.failure(RemoteError.clientError(error!)))
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse,
-                200..<400 ~= response.statusCode else {
-                    completion(.failure(RemoteError.dataNilError))
+            self.handleResponse(data: data, response: response, error: error) { result in
+                guard result.error == nil else {
+                    completion(.failure(result.error!))
                     return
+                }
+                completion(.success(true))
             }
-            
-            guard let _ = data else {
-                completion(.failure(RemoteError.dataNilError))
-                return
-            }
-            completion(.success(true))
-            
         }.resume()
     }
 }
