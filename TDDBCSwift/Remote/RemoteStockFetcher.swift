@@ -15,8 +15,6 @@ protocol RemoteStockFechable {
 
 struct RemoteStockFetcher: RemoteStockFechable, ResponseHandlable {
     
-    typealias T = Stock
-    
     let urlSession: SessionProtocol
     
     func getStock(of beverage: Beverage, completion: @escaping (Result<Stock, Error>) -> Void) {
@@ -27,19 +25,11 @@ struct RemoteStockFetcher: RemoteStockFechable, ResponseHandlable {
         }
         
         urlSession.dataTask(with: url) { data, response, error in
-
-            self.handleResponse(data: data,  response: response, error: error) { result in
-                guard result.error == nil, let data = result.value else {
-                    completion(.failure(result.error!))
-                    return
-                }
-                guard let item = try? JSONDecoder().decode(T.self, from: data) else {
-                    completion(.failure(RemoteError.JSONDecodeError))
-                    return
-                }
-                completion(.success(item))
-            }
-        }.resume()
+            
+            self.handleResponse(data: data,
+                                response: response,
+                                error: error) { completion($0) }
+            }.resume()
     }
     
     func getAllStock(completion: @escaping (Result<[Stock], Error>) -> Void) {
@@ -50,19 +40,12 @@ struct RemoteStockFetcher: RemoteStockFechable, ResponseHandlable {
         }
         
         urlSession.dataTask(with: url) { data, response, error in
-            
-            self.handleResponse(data: data, response: response, error: error) { result in
-                guard result.error == nil, let data = result.value else {
-                    completion(.failure(result.error!))
-                    return
-                }
-                guard let item = try? JSONDecoder().decode([T].self, from: data) else {
-                    completion(.failure(RemoteError.JSONDecodeError))
-                    return
-                }
-                completion(.success(item))
-            }
-        }.resume()
-    }
+            self.handleResponse(data: data,
+                                response: response,
+                                error: error) { completion($0) }
+            }.resume()
+    }    
 }
+
+
 

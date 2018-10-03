@@ -8,9 +8,7 @@
 
 import Foundation
 
-protocol ResponseHandlable {
-    associatedtype T
-}
+protocol ResponseHandlable {}
 
 extension ResponseHandlable {
     
@@ -33,5 +31,21 @@ extension ResponseHandlable {
             return
         }
         completion(.success(data))
+    }
+    
+    func handleResponse<T: Decodable>(data: Data?, response: URLResponse?, error: Error?, completion: @escaping (Result<T, Error>) -> Void) {
+        
+        self.handleResponse(data: data, response: response, error: error) { result in
+            
+            guard result.error == nil, let data = result.value else {
+                completion(.failure(result.error!))
+                return
+            }
+            guard let item = try? JSONDecoder().decode(T.self, from: data) else {
+                completion(.failure(RemoteError.JSONDecodeError))
+                return
+            }
+            completion(.success(item))
+        }
     }
 }

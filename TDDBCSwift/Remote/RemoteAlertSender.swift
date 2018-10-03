@@ -14,8 +14,6 @@ protocol RemoteAlertSendable {
 
 struct RemoteAlertSender: RemoteAlertSendable, ResponseHandlable {
 
-    typealias T = Bool
-    
     let urlSession: SessionProtocol
     
     func sendAlert(of beverage: Beverage, completion: @escaping (Result<Bool, Error>) -> Void) {
